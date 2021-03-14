@@ -2,7 +2,6 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: content/intro
-- file: content/language-models/intro.md
+- file: content/language-models/intro
   sections:
-    - file: content/language-models/fine_tune_jp_bert_part01.ipynb
-    - file: content/language-models/fine_tune_jp_bert_part02.ipynb
+    - file: content/language-models/fine_tune_jp_bert_part01
