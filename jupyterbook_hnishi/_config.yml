@@ -3,6 +3,7 @@
 # See the documentation for help and more options: 
 # https://jupyterbook.org/customize/config.html
 
+
 #######################################################################################
 # Book settings
 title: jupyterbook-hnishi  # The title of the book. Will be placed in the left navbar.
@@ -12,6 +13,7 @@ logo: content/images/logo/logo.png  # sets the logo of the book, relative to the
 
 # Patterns to skip when building the book. Can be glob-style (e.g. "*skip.ipynb")
 exclude_patterns            : [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoints"]
+
 
 #######################################################################################
 # Execution settings
@@ -24,6 +26,7 @@ execute:
                                     # otherwise the notebook's parent directory will be the cwd.
   allow_errors              : false # If `False`, when a code cell raises an error the execution is stopped, otherwise all cells are always run.
   stderr_output             : show  # One of 'show', 'remove', 'remove-warn', 'warn', 'error', 'severe'
+
 
 #######################################################################################
 # HTML-specific settings
@@ -41,6 +44,7 @@ html:
     hypothesis              : false
     utterances              : false
 
+
 #######################################################################################
 # Launch button settings
 launch_buttons:
@@ -56,3 +60,10 @@ repository:
   path_to_book: jupyterbook_hnishi  # An optional path to your book, defaults to repo root
   branch: main  # An optional branch, defaults to `master`
 
+
+#######################################################################################
+# Manual Sphinx configuration¶
+# see https://jupyterbook.org/advanced/sphinx.html#manual-sphinx-configuration
+sphinx:
+  config:
+    html_search_language: ja
