@@ -1,0 +1,979 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02 &#8212; jupyterbook-hnishi</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="http://jupyterbook.hnishi.com/content/language-models/fine_tune_jp_bert_part02.html" />
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01" href="fine_tune_jp_bert_part01.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="http://jupyterbook.hnishi.com/content/language-models/fine_tune_jp_bert_part02.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02" />
+<meta property="og:description" content="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02  part01 に引き続いて、今回は、まとまったデータセットを使い、transformers の Trainer class を使いファインチューニ" />
+<meta property="og:image"       content="http://jupyterbook.hnishi.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">jupyterbook-hnishi</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   はじめに
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="intro.html">
+   自然言語処理
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part01.html">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/language-models/fine_tune_jp_bert_part02.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi/issues/new?title=Issue%20on%20page%20%2Fcontent/language-models/fine_tune_jp_bert_part02.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/hnishi/jupyterbook-hnishi/edit/main/jupyterbook_hnishi/content/language-models/fine_tune_jp_bert_part02.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/hnishi/jupyterbook-hnishi/main?urlpath=tree/jupyterbook_hnishi/content/language-models/fine_tune_jp_bert_part02.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/main/jupyterbook_hnishi/content/language-models/fine_tune_jp_bert_part02.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   参考
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   必要なライブラリのインストール
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   学習データの準備
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     データの確認
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     ラベルごとのデータ件数の確認
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     カスタムデータセットに変換
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   学習
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   評価
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fine-tune">
+   fine tune したモデルで推論
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id9">
+   学習済みモデルを保存
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id10">
+   まとめ
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <p><a href="https://colab.research.google.com/github/hnishi/handson-language-models/blob/main/fine_tune_jp_bert_part02.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<div class="section" id="huggingface-transformers-bert-with-google-colab-part02">
+<h1>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02<a class="headerlink" href="#huggingface-transformers-bert-with-google-colab-part02" title="Permalink to this headline">¶</a></h1>
+<p>part01 に引き続いて、今回は、まとまったデータセットを使い、transformers の Trainer class を使いファインチューニングする方法を記載します。</p>
+<p>また、学習後の評価方法に関しても記載します。</p>
+<p>なお、今回はまとまった量 (4000 件程度) のデータを使って学習を行いますので、GPU の使用を推奨します (著者は google colab を使用して動作確認しています)。</p>
+<hr class="docutils" />
+<p>この記事は、part02 です。</p>
+<p>すべての記事の目次は以下をご参照ください。</p>
+<p><a class="reference external" href="https://github.com/hnishi/handson-language-models/blob/main/README.md">https://github.com/hnishi/handson-language-models/blob/main/README.md</a></p>
+<div class="section" id="id1">
+<h2>参考<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://huggingface.co/transformers/">huggingface transformers ドキュメント</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1810.04805">BERT 論文</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/fine-tuning-a-bert-model-with-transformers-c8e49c4e008b">Fine-tuning a BERT model with transformers</a></p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>必要なライブラリのインストール<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q transformers
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 1.9MB 7.7MB/s 
+     |████████████████████████████████| 3.2MB 36.1MB/s 
+     |████████████████████████████████| 890kB 51.3MB/s 
+?25h  Building wheel for sacremoses (setup.py) ... ?25l?25hdone
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AdamW</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>学習データの準備<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>株式会社リクルート 様が公開している <a class="reference external" href="https://github.com/megagonlabs/jrte-corpus">Japanese Realistic Textual Entailment Corpus (含意関係データセット) </a> を使わせていただきます。</p>
+<p>下記、制限があるため注意します。</p>
+<blockquote>
+<div><p>リクルートは本データセットを非営利的な公共利用のために公開しています。分析・研究・その成果を発表するために必要な範囲を超えて利用すること（営利目的利用）は固く禁じます。</p>
+</div></blockquote>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>林部祐太．
+知識の整理のための根拠付き自然文間含意関係コーパスの構築．
+言語処理学会第26回年次大会論文集，pp.820-823. 2020. (NLP 2020)
+<a class="reference external" href="https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P4-9.pdf">[PDF]</a>
+<a class="reference external" href="https://storage.googleapis.com/megagon-publications/nlp2020/p4-9_hayashibe_poster.pdf">[Poster]</a></p></li>
+<li><p>Yuta Hayashibe.
+Japanese Realistic Textual Entailment Corpus.
+Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-6836. 2020. (LREC 2020)
+<a class="reference external" href="https://www.aclweb.org/anthology/2020.lrec-1.843.pdf">[PDF]</a>
+<a class="reference external" href="https://www.aclweb.org/anthology/2020.lrec-1.843.bib">[bib]</a></p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>curl -L -O https://raw.githubusercontent.com/megagonlabs/jrte-corpus/master/data/pn.tsv
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  473k  100  473k    0     0  2151k      0 --:--:-- --:--:-- --:--:-- 2151k
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 各カラムの意味は https://github.com/megagonlabs/jrte-corpus#datapntsv を参照</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;pn.tsv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;judges&quot;</span><span class="p">,</span> <span class="s2">&quot;usage&quot;</span><span class="p">])</span>
+
+<span class="c1"># ラベルを 1, 0, -1 --&gt; 0, 1, 2 へ変換</span>
+<span class="c1"># Label:	2 (Positive), 1 (Neutral), 0 (Negative)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>データの確認<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>label</th>
+      <th>text</th>
+      <th>judges</th>
+      <th>usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>pn17q00001</td>
+      <td>1</td>
+      <td>出張でお世話になりました。</td>
+      <td>{"0": 3}</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>pn17q00002</td>
+      <td>1</td>
+      <td>朝食は普通でした。</td>
+      <td>{"0": 3}</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>pn17q00003</td>
+      <td>2</td>
+      <td>また是非行きたいです。</td>
+      <td>{"1": 3}</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>pn17q00004</td>
+      <td>2</td>
+      <td>また利用したいと思えるホテルでした。</td>
+      <td>{"1": 3}</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>pn17q00005</td>
+      <td>2</td>
+      <td>駅から近くて便利でした。</td>
+      <td>{"0": 1, "1": 2}</td>
+      <td>test</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>ラベルごとのデータ件数の確認<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>全体的に、positive なラベルが多いようです。</p>
+<p>したがって、¥学習の結果 positive に極端に判定されやすいモデルとなってしまう可能性があるため注意が必要です。</p>
+<p>評価指標に accuracy ではなく、F1 score などの不均衡データに関しても正しく評価できるものを選択する必要があります。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;usage&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7feb63f13310&gt;
+</pre></div>
+</div>
+<img alt="../../_images/fine_tune_jp_bert_part02_11_1.png" src="../../_images/fine_tune_jp_bert_part02_11_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>カスタムデータセットに変換<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>後述する huggingface transformers の Trainer クラスで学習を行うために、カスタムデータセットとして準備します。</p>
+<p>usage が train と dev のサンプルを学習用、test のサンプルをテスト用として分割します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;usage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;train&quot;</span> <span class="ow">or</span> <span class="s2">&quot;val&quot;</span><span class="p">)]</span>
+<span class="n">train_docs</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">train_labels</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">train_docs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3888
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;usage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">]</span>
+<span class="n">test_docs</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">test_labels</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">test_docs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>553
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>学習<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># GPU が利用できる場合は GPU を利用する</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">device</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;cuda:0&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">BertForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "b0b627dfb3734752bd2ca0b0b9e9d291", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "49c3a662adfd4e4ab8018ea463b88b56", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForSequenceClassification: [&#39;cls.predictions.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.decoder.weight&#39;, &#39;cls.predictions.decoder.bias&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.seq_relationship.bias&#39;]
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-large-japanese and are newly initialized: [&#39;classifier.weight&#39;, &#39;classifier.bias&#39;]
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "01f7080efd7249b3a23a9815827ddbf2", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "ec3fba1c34f345ea9912e2aa89431001", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_encodings</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">train_docs</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">test_encodings</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">test_docs</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="k">class</span> <span class="nc">JpSentiDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encodings</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encodings</span> <span class="o">=</span> <span class="n">encodings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">encodings</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">JpSentiDataset</span><span class="p">(</span><span class="n">train_encodings</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">JpSentiDataset</span><span class="p">(</span><span class="n">test_encodings</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can set `requires_grad` to `False` for all the base model parameters in order to fine-tune only the task-specific parameters.</span>
+<span class="c1"># Ref: https://huggingface.co/transformers/training.html#freezing-the-encoder</span>
+
+<span class="c1"># freeze させないほうが F1 スコアが高くなったためコメントアウトしています</span>
+<span class="c1"># for param in model.base_model.parameters():</span>
+<span class="c1">#     param.requires_grad = False</span>
+
+<span class="c1"># For more detail, see https://korenv20.medium.com/do-we-need-to-freeze-embeddings-when-fine-tuning-our-lm-c8bccf4ffeba</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To calculate additional metrics in addition to the loss, you can also define your own compute_metrics function and pass it to the trainer.</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_recall_fscore_support</span>
+
+<span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">label_ids</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">predictions</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="n">acc</span><span class="p">,</span>
+        <span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="n">f1</span><span class="p">,</span>
+        <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+        <span class="s1">&#39;recall&#39;</span><span class="p">:</span> <span class="n">recall</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>1 epoch で試したときは、学習に GPU を使い 2 分程度かかりました。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span>
+
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;./results&#39;</span><span class="p">,</span>          <span class="c1"># output directory</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>              <span class="c1"># total number of training epochs</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># batch size per device during training</span>
+    <span class="n">per_device_eval_batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>   <span class="c1"># batch size for evaluation</span>
+    <span class="n">warmup_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>                <span class="c1"># number of warmup steps for learning rate scheduler</span>
+    <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>               <span class="c1"># strength of weight decay</span>
+    <span class="n">save_total_limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>              <span class="c1"># limit the total amount of checkpoints. Deletes the older checkpoints.</span>
+    <span class="n">dataloader_pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Whether you want to pin memory in data loaders or not. Will default to True</span>
+    <span class="c1"># evaluation_strategy=&quot;epoch&quot;,     # Evaluation is done at the end of each epoch.</span>
+    <span class="n">evaluation_strategy</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">logging_dir</span><span class="o">=</span><span class="s1">&#39;./logs&#39;</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>                         <span class="c1"># the instantiated 🤗 Transformers model to be trained</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>                  <span class="c1"># training arguments, defined above</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>         <span class="c1"># training dataset</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>             <span class="c1"># evaluation dataset</span>
+    <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span>  <span class="c1"># The function that will be used to compute metrics at evaluation</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.7/dist-packages/ipykernel_launcher.py:9: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  if __name__ == &#39;__main__&#39;:
+</pre></div>
+</div>
+<div class="output text_html">
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+        </style>
+
+      <progress value='243' max='243' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [243/243 05:21, Epoch 1/1]
+    </div>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Step</th>
+      <th>Training Loss</th>
+      <th>Validation Loss</th>
+      <th>Accuracy</th>
+      <th>F1</th>
+      <th>Precision</th>
+      <th>Recall</th>
+      <th>Runtime</th>
+      <th>Samples Per Second</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>50</td>
+      <td>0.912000</td>
+      <td>0.869623</td>
+      <td>0.611212</td>
+      <td>0.470534</td>
+      <td>0.559272</td>
+      <td>0.611212</td>
+      <td>10.780300</td>
+      <td>51.297000</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.844600</td>
+      <td>0.743053</td>
+      <td>0.665461</td>
+      <td>0.584265</td>
+      <td>0.633969</td>
+      <td>0.665461</td>
+      <td>10.670700</td>
+      <td>51.824000</td>
+    </tr>
+    <tr>
+      <td>150</td>
+      <td>0.752400</td>
+      <td>0.628209</td>
+      <td>0.728752</td>
+      <td>0.705608</td>
+      <td>0.733463</td>
+      <td>0.728752</td>
+      <td>10.741600</td>
+      <td>51.482000</td>
+    </tr>
+    <tr>
+      <td>200</td>
+      <td>0.645400</td>
+      <td>0.522036</td>
+      <td>0.761302</td>
+      <td>0.754351</td>
+      <td>0.758591</td>
+      <td>0.761302</td>
+      <td>10.813100</td>
+      <td>51.142000</td>
+    </tr>
+  </tbody>
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=243, training_loss=0.7476195975095646, metrics={&#39;train_runtime&#39;: 322.8845, &#39;train_samples_per_second&#39;: 0.753, &#39;total_flos&#39;: 936757749027744, &#39;epoch&#39;: 1.0})
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluation のみ実行</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">eval_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.7/dist-packages/ipykernel_launcher.py:9: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  if __name__ == &#39;__main__&#39;:
+</pre></div>
+</div>
+<div class="output text_html">
+<div>
+    <style>
+        /* Turns off some styling */
+        progress {
+            /* gets rid of default border in Firefox and Opera. */
+            border: none;
+            /* Needs to be in here for Safari polyfill so background images work as expected. */
+            background-size: auto;
+        }
+    </style>
+
+  <progress value='9' max='9' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  [9/9 00:09]
+</div>
+</div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;epoch&#39;: 1.0,
+ &#39;eval_accuracy&#39;: 0.755877034358047,
+ &#39;eval_f1&#39;: 0.7268075608453904,
+ &#39;eval_loss&#39;: 0.6674010157585144,
+ &#39;eval_precision&#39;: 0.762758084435675,
+ &#39;eval_recall&#39;: 0.755877034358047,
+ &#39;eval_runtime&#39;: 10.7683,
+ &#39;eval_samples_per_second&#39;: 51.355}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>評価<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>上記のテストデータの評価結果を見ると、</p>
+<p>ちなみに、以下を入れて parameter を freeze させて fine tuning を行った場合は、accuracy が 0.60、F1 値が 0.46 となり、かなり低くなってしまいました。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>学習の評価指標はデフォルトでは、 <code class="docutils literal notranslate"><span class="pre">runs/**CURRENT_DATETIME_HOSTNAME**</span></code> に出力されています。</p>
+<p>tensorboard での可視化が可能です。</p>
+<p>Ref: <a class="reference external" href="https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments">https://huggingface.co/transformers/main_classes/trainer.html#trainingarguments</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
+<span class="o">%</span><span class="k">tensorboard</span> --logdir logs
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+        (async () => {
+            const url = new URL(await google.colab.kernel.proxyPort(6006, {'cache': true}));
+            url.searchParams.set('tensorboardColab', 'true');
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.setAttribute('width', '100%');
+            iframe.setAttribute('height', '800');
+            iframe.setAttribute('frameborder', 0);
+            document.body.appendChild(iframe);
+        })();
+    </script></div>
+</div>
+</div>
+<div class="section" id="fine-tune">
+<h2>fine tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span><span class="p">(</span><span class="s2">&quot;私はこの映画をみることができて、とても嬉しい。&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.9585415720939636}]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span><span class="p">(</span><span class="s2">&quot;猫に足を噛まれて痛い。&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.7770922780036926}]
+</pre></div>
+</div>
+</div>
+</div>
+<p>いい感じに予測できていそうです。</p>
+</div>
+<div class="section" id="id9">
+<h2>学習済みモデルを保存<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>以下では、colab から google drive に保存する場合の例を示します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mounted at /content/drive
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_directory</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/trained_models/20210313_bert_sentiment&quot;</span>
+
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_directory</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_directory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>まとめ<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>日本語 BERT large の pre-trained model を fine tuning する方法をご紹介しました。</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "hnishi/jupyterbook-hnishi",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/language-models"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="fine_tune_jp_bert_part01.html" title="previous page">huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By hnishi<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
