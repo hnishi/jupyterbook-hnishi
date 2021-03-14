@@ -6,10 +6,10 @@
 
 #######################################################################################
 # Book settings
-title: jupyterbook-hnishi  # The title of the book. Will be placed in the left navbar.
+title: ハンズオン資料  # The title of the book. Will be placed in the left navbar.
 author: hnishi  # The author of the book
 copyright: "2021"  # Copyright year to be placed in the footer
-logo: content/images/logo/logo.png  # sets the logo of the book, relative to the book root. In the HTML output, it is displayed above the title in the left sidebar.
+logo: ""  # content/images/logo/logo.png  # sets the logo of the book, relative to the book root. In the HTML output, it is displayed above the title in the left sidebar.
 
 # Patterns to skip when building the book. Can be glob-style (e.g. "*skip.ipynb")
 exclude_patterns            : [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoints"]
