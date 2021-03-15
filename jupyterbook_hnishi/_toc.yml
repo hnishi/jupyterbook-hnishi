@@ -1,8 +1,8 @@
 # Table of content
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
-- file: content/intro
-- file: content/language-models/intro
+- file: intro
+- file: language-models/intro
   sections:
-    - file: content/language-models/fine_tune_jp_bert_part01.ipynb
-    - file: content/language-models/fine_tune_jp_bert_part02.ipynb
+    - file: language-models/fine_tune_jp_bert_part01.ipynb
+    - file: language-models/fine_tune_jp_bert_part02.ipynb

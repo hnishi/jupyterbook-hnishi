@@ -26,6 +26,12 @@ If you wish to disable this automation, you may remove the GitHub actions workfl
 
 This will automatically push your build to the `gh-pages` branch. More information on this hosting process can be found [here](https://jupyterbook.org/publish/gh-pages.html#manually-host-your-book-with-github-pages).
 
+## Development
+
+```
+poetry install --no-root
+```
+
 ## Contributors
 
 We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/hnishi/jupyterbook_hnishi/graphs/contributors).
