@@ -2,6 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: intro
+- file: pca.ipynb
 - file: language-models/intro
   sections:
     - file: language-models/easy_try_sentiment_analysis.ipynb
