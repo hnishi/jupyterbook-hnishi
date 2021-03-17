@@ -4,5 +4,6 @@
 - file: intro
 - file: language-models/intro
   sections:
+    - file: language-models/easy_try_sentiment_analysis.ipynb
     - file: language-models/fine_tune_jp_bert_part01.ipynb
     - file: language-models/fine_tune_jp_bert_part02.ipynb
