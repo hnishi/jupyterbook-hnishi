@@ -1,0 +1,1898 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>主成分分析 （主成分解析、Principal component analysis : PCA） &#8212; ハンズオン資料</title>
+    
+  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="canonical" href="http://jupyterbook.hnishi.com/pca.html" />
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="自然言語処理" href="language-models/intro.html" />
+    <link rel="prev" title="はじめに" href="intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="http://jupyterbook.hnishi.com/pca.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="主成分分析 （主成分解析、Principal component analysis : PCA）" />
+<meta property="og:description" content="主成分分析 （主成分解析、Principal component analysis : PCA）  概要  主成分分析は、教師なし線形変換法の１つ  データセットの座標軸を、データの分散が最大になる方向に変換し、元の次元と同じもしくは、元の次元数より低い新しい特徴部分空間を作成する手法  主なタスク  次元削減  次元" />
+
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">ハンズオン資料</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   はじめに
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   主成分分析 （主成分解析、Principal component analysis : PCA）
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="language-models/intro.html">
+   自然言語処理
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="language-models/easy_try_sentiment_analysis.html">
+     Python で日本語文章の感情分析を簡単に試す (with google colab)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="language-models/fine_tune_jp_bert_part01.html">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="language-models/fine_tune_jp_bert_part02.html">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/pca.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi/issues/new?title=Issue%20on%20page%20%2Fpca.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/hnishi/jupyterbook-hnishi/edit/main/jupyterbook_hnishi/pca.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/hnishi/jupyterbook-hnishi/main?urlpath=tree/jupyterbook_hnishi/pca.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/main/jupyterbook_hnishi/pca.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   概要
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   応用例
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pca">
+   主成分分析 (PCA) が行う座標変換のイメージ
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   主成分分析の主要な手順
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-pca">
+   python による PCA の実行
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     データセット
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#total-and-explained-variance">
+   全分散と説明分散（Total and explained variance）
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#factor-loading">
+   因子負荷量 (Factor loading)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feature-transformation">
+   特徴変換 (Feature transformation)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     まずは、次元削減を行わずに、13 次元 –&gt; 13 次元の座標変換を見てみる
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     座標変換された空間から元の空間への復元
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   座標変換された空間から元の空間への復元
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     13 次元 –&gt; 2 次元に次元削減する
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     2次元に射影後の全データを、ラベルごとに色付けしてプロットする
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id10">
+   次元削減された空間から元の空間への復元
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#principal-component-analysis-in-scikit-learn">
+   Principal component analysis in scikit-learn
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     因子負荷量の確認
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id12">
+   2次元に次元削減された特徴量を用いてロジスティック回帰を行ってみる
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id13">
+     学習時間の計測
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id14">
+     トレーニングデータセットの予測結果
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id15">
+     テストデータに対する予測結果
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   3 次元に次元削減された特徴量を用いてロジスティック回帰を行ってみる
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id17">
+   次元削減せずにロジスティック回帰を行ってみる
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id18">
+     2つの特徴量だけでロジスティック回帰を行ってみる
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id19">
+   まとめ
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/pca.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<div class="section" id="principal-component-analysis-pca">
+<h1>主成分分析 （主成分解析、Principal component analysis : PCA）<a class="headerlink" href="#principal-component-analysis-pca" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>概要<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>主成分分析は、教師なし線形変換法の１つ</p>
+<ul>
+<li><p>データセットの座標軸を、データの分散が最大になる方向に変換し、元の次元と同じもしくは、元の次元数より低い新しい特徴部分空間を作成する手法</p></li>
+</ul>
+</li>
+<li><p>主なタスク</p>
+<ul>
+<li><p>次元削減</p></li>
+</ul>
+</li>
+<li><p>次元削減を行うことで以下の目的を達成できる</p>
+<ul>
+<li><p>特徴抽出</p></li>
+<li><p>データの可視化</p></li>
+</ul>
+</li>
+<li><p>次元削減を行うメリット</p>
+<ul>
+<li><p>計算コスト（計算時間、メモリ使用量）を削減できる</p></li>
+<li><p>特徴量を削減したことによる情報の喪失をできるだけ小さくする</p></li>
+<li><p>モデルを簡素化できる（パラメータが減る）ため、オーバーフィッティングを防げる</p></li>
+<li><p>人間が理解可能な空間にデータを投影することができる（非常に高次元な空間を、身近な3次元、2次元に落とし込むことができる）</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>応用例<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>タンパク質分子の立体構造モデルの構造空間の次元削減と可視化</p></li>
+<li><p>タンパク質の全原子モデルの立体構造は、分子内に含まれる原子の座標情報で表すことができる （原子数 × 3 (x, y, z) 次元のベクトル）</p></li>
+</ul>
+<p>以下は、タンパク質の分子シミュレーションで使われるモデルの1例。<br />
+（紫色とオレンジ色で表されたリボンモデルがタンパク質で、周りに水とイオンが表示されている）<br />
+（この場合、3547 個の原子 –&gt; 10641 次元）</p>
+<img src="https://github.com/hnishi/hnishi_da_handson/blob/master/images/cdr-h3-pbc.png?raw=true" width="50%">
+<p>主成分分析により、この立体構造空間を、2次元空間に投影することができる。<br />
+以下は、その投影に対して自由エネルギーを計算した図。</p>
+<p><img alt="pmf" src="https://github.com/hnishi/hnishi_da_handson/blob/dev/images/pmf.jpeg?raw=true" /></p>
+<p>2次元空間上の1点が、1つの立体構造を表している。<br />
+つまり、この例では、もともと10641次元あった空間を2次元にまで削減している。</p>
+<p>Ref) <a class="reference external" href="https://academic.oup.com/peds/article/29/11/477/2462452">Nishigami, H., Kamiya, N., &amp; Nakamura, H. (2016). Revisiting antibody modeling assessment for CDR-H3 loop. Protein Engineering, Design and Selection, 29(11), 477-484.</a></p>
+</div>
+<div class="section" id="pca">
+<h2>主成分分析 (PCA) が行う座標変換のイメージ<a class="headerlink" href="#pca" title="Permalink to this headline">¶</a></h2>
+<p>以下は、PCAが行う座標変換の例</p>
+<p><span class="math notranslate nohighlight">\(x_1\)</span> , <span class="math notranslate nohighlight">\(x_2\)</span> は、データセットの元々の座標軸であり、<br />
+PC1, PC2 は座標変換後に得られる新しい座標軸、主成分1、主成分2 である (Principal Components)。</p>
+<img src="https://github.com/rasbt/python-machine-learning-book-2nd-edition/blob/master/code/ch05/images/05_01.png?raw=true" width="50%"><ul class="simple">
+<li><p>PCA は、高次元データにおいて分散が最大となる方向を見つけ出し、座標を変換する （これはつまり、すべての主成分が、他の主成分と相関がない（直交する) ように座標変換している)</p></li>
+<li><p>最初の主成分 (PC1) の分散が最大となる</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>主成分分析の主要な手順<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>d 次元のデータを k 次元に削減する場合</p>
+<ol class="simple">
+<li><p>d 次元のデータの標準化（特徴量間のスケールが異なる場合のみ）</p></li>
+<li><p>分散共分散行列の作成</p></li>
+<li><p>分散共分散行列の固有値と固有ベクトルを求める</p></li>
+<li><p>固有値を降順にソートして、固有ベクトルをランク付けする</p></li>
+<li><p>最も大きい k 個の固有値に対応する k 個の固有ベクトルを選択 (k ≦ d)</p></li>
+<li><p>k 個の固有ベクトルから射影(変換)行列 W を作成</p></li>
+<li><p>射影(変換)行列を使って d 次元の入力データセットを新しい k 次元の特徴部分空間を取得する</p></li>
+</ol>
+<hr class="docutils" />
+<p>固有値問題を解くことで、線形独立な基底ベクトルを得ることができる。<br />
+詳細は、線形代数の書籍等を参考にする（ここでは詳細な解説をしない）。</p>
+<p>参考）</p>
+<p><a class="reference external" href="https://dora.bk.tsukuba.ac.jp/~takeuchi/?%E7%B7%9A%E5%BD%A2%E4%BB%A3%E6%95%B0II%2F%E5%9B%BA%E6%9C%89%E5%80%A4%E5%95%8F%E9%A1%8C%E3%83%BB%E5%9B%BA%E6%9C%89%E7%A9%BA%E9%96%93%E3%83%BB%E3%82%B9%E3%83%9A%E3%82%AF%E3%83%88%E3%83%AB%E5%88%86%E8%A7%A3">https://dora.bk.tsukuba.ac.jp/~takeuchi/?線形代数II/固有値問題・固有空間・スペクトル分解</a></p>
+</div>
+<div class="section" id="python-pca">
+<h2>python による PCA の実行<a class="headerlink" href="#python-pca" title="Permalink to this headline">¶</a></h2>
+<p>以下、Python を使った PCA の実行を順番に見ていく。<br />
+その後、scikit-learn ライブラリを使った PCA の簡単で効率のよい実装を見る。</p>
+<div class="section" id="id4">
+<h3>データセット<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>データセットは、 <a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Wine">Wine</a> というオープンソースのデータセットを使う。</p></li>
+<li><p>178 行のワインサンプルと、それらの化学的性質を表す 13 列の特徴量で構成されている。</p></li>
+<li><p>それぞれのサンプルに、クラス 1, 2, 3 のいずれかがラベルされており、<br />
+イタリアの同じ地域で栽培されている異なる品種のブドウを表している<br />
+（PCA は教師なし学習なので、学習時にラベルは使わない）。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># df_wine = pd.read_csv(&#39;https://archive.ics.uci.edu/ml/&#39;</span>
+<span class="c1">#                       &#39;machine-learning-databases/wine/wine.data&#39;,</span>
+<span class="c1">#                       header=None)</span>
+
+<span class="c1"># if the Wine dataset is temporarily unavailable from the</span>
+<span class="c1"># UCI machine learning repository, un-comment the following line</span>
+<span class="c1"># of code to load the dataset from a local path:</span>
+
+<span class="n">df_wine</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://github.com/rasbt/python-machine-learning-book-2nd-edition&#39;</span>
+                      <span class="s1">&#39;/raw/master/code/ch05/wine.data&#39;</span><span class="p">,</span>
+                      <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">df_wine</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">,</span> <span class="s1">&#39;Alcohol&#39;</span><span class="p">,</span> <span class="s1">&#39;Malic acid&#39;</span><span class="p">,</span> <span class="s1">&#39;Ash&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Alcalinity of ash&#39;</span><span class="p">,</span> <span class="s1">&#39;Magnesium&#39;</span><span class="p">,</span> <span class="s1">&#39;Total phenols&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Flavanoids&#39;</span><span class="p">,</span> <span class="s1">&#39;Nonflavanoid phenols&#39;</span><span class="p">,</span> <span class="s1">&#39;Proanthocyanins&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Color intensity&#39;</span><span class="p">,</span> <span class="s1">&#39;Hue&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;OD280/OD315 of diluted wines&#39;</span><span class="p">,</span> <span class="s1">&#39;Proline&#39;</span><span class="p">]</span>
+
+<span class="n">df_wine</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Class label</th>
+      <th>Alcohol</th>
+      <th>Malic acid</th>
+      <th>Ash</th>
+      <th>Alcalinity of ash</th>
+      <th>Magnesium</th>
+      <th>Total phenols</th>
+      <th>Flavanoids</th>
+      <th>Nonflavanoid phenols</th>
+      <th>Proanthocyanins</th>
+      <th>Color intensity</th>
+      <th>Hue</th>
+      <th>OD280/OD315 of diluted wines</th>
+      <th>Proline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>14.23</td>
+      <td>1.71</td>
+      <td>2.43</td>
+      <td>15.6</td>
+      <td>127</td>
+      <td>2.80</td>
+      <td>3.06</td>
+      <td>0.28</td>
+      <td>2.29</td>
+      <td>5.64</td>
+      <td>1.04</td>
+      <td>3.92</td>
+      <td>1065</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>13.20</td>
+      <td>1.78</td>
+      <td>2.14</td>
+      <td>11.2</td>
+      <td>100</td>
+      <td>2.65</td>
+      <td>2.76</td>
+      <td>0.26</td>
+      <td>1.28</td>
+      <td>4.38</td>
+      <td>1.05</td>
+      <td>3.40</td>
+      <td>1050</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>13.16</td>
+      <td>2.36</td>
+      <td>2.67</td>
+      <td>18.6</td>
+      <td>101</td>
+      <td>2.80</td>
+      <td>3.24</td>
+      <td>0.30</td>
+      <td>2.81</td>
+      <td>5.68</td>
+      <td>1.03</td>
+      <td>3.17</td>
+      <td>1185</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>14.37</td>
+      <td>1.95</td>
+      <td>2.50</td>
+      <td>16.8</td>
+      <td>113</td>
+      <td>3.85</td>
+      <td>3.49</td>
+      <td>0.24</td>
+      <td>2.18</td>
+      <td>7.80</td>
+      <td>0.86</td>
+      <td>3.45</td>
+      <td>1480</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>13.24</td>
+      <td>2.59</td>
+      <td>2.87</td>
+      <td>21.0</td>
+      <td>118</td>
+      <td>2.80</td>
+      <td>2.69</td>
+      <td>0.39</td>
+      <td>1.82</td>
+      <td>4.32</td>
+      <td>1.04</td>
+      <td>2.93</td>
+      <td>735</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Wine データセットの先頭 5 行のデータは上記。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i_label</span> <span class="ow">in</span> <span class="n">df_wine</span><span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;label:&#39;</span><span class="p">,</span> <span class="n">i_label</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shape:&#39;</span><span class="p">,</span> <span class="n">df_wine</span><span class="p">[</span><span class="n">df_wine</span><span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i_label</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>label: 1
+shape: (59, 14)
+label: 2
+shape: (71, 14)
+label: 3
+shape: (48, 14)
+</pre></div>
+</div>
+</div>
+</div>
+<p>ラベルの数はおおよそ揃っている。<br />
+次に、ラベルごとにデータの分布を見てみる。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">for</span> <span class="n">i_feature</span> <span class="ow">in</span> <span class="n">df_wine</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">i_feature</span> <span class="o">==</span> <span class="s1">&#39;Class label&#39;</span><span class="p">:</span> <span class="k">continue</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;feature: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i_feature</span><span class="p">))</span>
+  <span class="c1"># ヒストグラムの描画</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df_wine</span><span class="p">[</span><span class="n">df_wine</span><span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="n">i_feature</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> 
+  <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df_wine</span><span class="p">[</span><span class="n">df_wine</span><span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">][</span><span class="n">i_feature</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df_wine</span><span class="p">[</span><span class="n">df_wine</span><span class="p">[</span><span class="s1">&#39;Class label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">][</span><span class="n">i_feature</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span> 
+  <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span> <span class="c1"># 凡例表示</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Alcohol
+</pre></div>
+</div>
+<img alt="_images/pca_14_1.png" src="_images/pca_14_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Malic acid
+</pre></div>
+</div>
+<img alt="_images/pca_14_3.png" src="_images/pca_14_3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Ash
+</pre></div>
+</div>
+<img alt="_images/pca_14_5.png" src="_images/pca_14_5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Alcalinity of ash
+</pre></div>
+</div>
+<img alt="_images/pca_14_7.png" src="_images/pca_14_7.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Magnesium
+</pre></div>
+</div>
+<img alt="_images/pca_14_9.png" src="_images/pca_14_9.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Total phenols
+</pre></div>
+</div>
+<img alt="_images/pca_14_11.png" src="_images/pca_14_11.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Flavanoids
+</pre></div>
+</div>
+<img alt="_images/pca_14_13.png" src="_images/pca_14_13.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Nonflavanoid phenols
+</pre></div>
+</div>
+<img alt="_images/pca_14_15.png" src="_images/pca_14_15.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Proanthocyanins
+</pre></div>
+</div>
+<img alt="_images/pca_14_17.png" src="_images/pca_14_17.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Color intensity
+</pre></div>
+</div>
+<img alt="_images/pca_14_19.png" src="_images/pca_14_19.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Hue
+</pre></div>
+</div>
+<img alt="_images/pca_14_21.png" src="_images/pca_14_21.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: OD280/OD315 of diluted wines
+</pre></div>
+</div>
+<img alt="_images/pca_14_23.png" src="_images/pca_14_23.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Proline
+</pre></div>
+</div>
+<img alt="_images/pca_14_25.png" src="_images/pca_14_25.png" />
+</div>
+</div>
+<p>データを70％のトレーニングと30％のテストサブセットに分割する。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">df_wine</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df_wine</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> \
+    <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> 
+                     <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                     <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>データの標準化を行う。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">sc</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span> <span class="c1"># トレーニングセットの標準偏差と平均値を使って、標準化を行う</span>
+<span class="n">X_test_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span> <span class="c1"># &quot;トレーニングセット&quot;の標準偏差と平均値を使って、標準化を行う</span>
+
+<span class="c1"># いずれの特徴量も、値がおおよそ、-1 から +1 の範囲にあることを確認する。</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;standardize train&#39;</span><span class="p">,</span> <span class="n">X_train_std</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;standardize test&#39;</span><span class="p">,</span> <span class="n">X_test_std</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>standardize train [[ 0.71225893  2.22048673 -0.13025864  0.05962872 -0.50432733 -0.52831584
+  -1.24000033  0.84118003 -1.05215112 -0.29218864 -0.20017028 -0.82164144
+  -0.62946362]
+ [ 0.88229214 -0.70457155  1.17533605 -0.09065504  2.34147876  1.01675879
+   0.66299475  1.0887425  -0.49293533  0.13152077  1.33982592  0.54931269
+   1.47568796]]
+standardize test [[ 0.89443737 -0.38811788  1.10073064 -0.81201711  1.13201117  1.09807851
+   0.71204102  0.18101342  0.06628046  0.51285923  0.79629785  0.44829502
+   1.90593792]
+ [-1.04879931 -0.77299397  0.54119006 -0.24093881  0.3494145  -0.70721922
+  -0.30812129  0.67613838 -1.03520519 -0.90656727  2.24570604 -0.56188171
+  -1.22874035]]
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>注意</strong></p>
+<p>テストデータの標準化の際に、テストデータの標準偏差と平均値を用いてはいけない（トレーニングデータの標準偏差と平均値を用いること）。<br />
+また、ここで求めた標準偏差と平均値は、未知のデータを標準化する際にも再使用するので、記録しておくこと。<br />
+（今回は、ノートブックだけで完結するので、外部ファイル等に記録しなくても問題ない）</p>
+<ul class="simple">
+<li><p>分散共分散行列を作成</p></li>
+<li><p>固有値問題を解いて、固有値と固有ベクトルを求める</p></li>
+</ul>
+<p>固有値問題とは、以下の条件を満たす、固有ベクトル <span class="math notranslate nohighlight">\(v\)</span> と、スカラー値である固有値 <span class="math notranslate nohighlight">\(\lambda\)</span> を求める問題のことである<br />
+（詳細は線形代数の書籍等を参考）。</p>
+<div class="math notranslate nohighlight">
+\[\Sigma v=\lambda v\]</div>
+<p><span class="math notranslate nohighlight">\(\Sigma\)</span> は分散共分散行列である（総和記号ではないことに注意）。</p>
+<p>分散共分散行列に関しては、 <a class="reference external" href="https://github.com/hnishi/hnishi_da_handson/blob/master/da_handson_basic_statistic_values.ipynb">前回の資料</a> を参照。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">cov_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X_train_std</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># 共分散行列のヒートマップ</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cov_mat</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df_wine</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">df_wine</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGnBu&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.6/dist-packages/statsmodels/tools/_testing.py:19: FutureWarning: pandas.util.testing is deprecated. Use the functions in the public API at pandas.testing instead.
+  import pandas.util.testing as tm
+</pre></div>
+</div>
+<img alt="_images/pca_21_1.png" src="_images/pca_21_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 固有値問題を解く（固有値分解）</span>
+<span class="n">eigen_vals</span><span class="p">,</span> <span class="n">eigen_vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">cov_mat</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Eigenvalues </span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">eigen_vals</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Shape of eigen vectors</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">eigen_vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues 
+[0.10754642 0.15362835 0.1808613  0.21357215 0.3131368  0.34650377
+ 0.51828472 0.6620634  0.84166161 0.96120438 1.54845825 2.41602459
+ 4.84274532]
+
+Shape of eigen vectors
+ (13, 13)
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>注意</strong>:</p>
+<p>固有値分解（固有分解とも呼ばれる）する numpy の関数は、</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.eig.html"><code class="docutils literal notranslate"><span class="pre">numpy.linalg.eig</span></code></a></p></li>
+<li><p><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.eigh.html"><code class="docutils literal notranslate"><span class="pre">numpy.linalg.eigh</span></code></a></p></li>
+</ul>
+<p>がある。<br />
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.eig</span></code> は対称正方行列と非対称正方行列を固有値分解する関数。複素数の固有値を返すことがある。<br />
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.eigh</span></code> はエルミート行列（各成分が複素数で、転置させた各成分の虚部の値の正負を反転させたものがもとの行列と等しくなる行列）を固有値分解する関数。常に実数の固有値を返す。</p>
+<p>分散共分散行列は、対称正方行列であり、虚数部が 0 のエルミート行列でもある。<br />
+対称正方行列の操作では、<code class="docutils literal notranslate"><span class="pre">numpy.linalg.eigh</span></code> の方が数値的に安定しているらしい。</p>
+<p>Ref) <em>Python Machine Learning 2nd Edition</em> by <a class="reference external" href="https://sebastianraschka.com">Sebastian Raschka</a>, Packt Publishing Ltd. 2017.</p>
+</div>
+</div>
+<div class="section" id="total-and-explained-variance">
+<h2>全分散と説明分散（Total and explained variance）<a class="headerlink" href="#total-and-explained-variance" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>固有値の大きさは、データに含まれる情報（分散）の大きさに対応している</p></li>
+<li><p>主成分j (PCj: j-th principal component) に対応する固有値 <span class="math notranslate nohighlight">\(\lambda_j\)</span> の分散説明率（寄与率、contribution ratio/propotion とも呼ばれる）は以下のように定義される。</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\dfrac {\lambda _{j}}{\sum ^{d}_{j=1}\lambda j}\]</div>
+<p><span class="math notranslate nohighlight">\(\lambda_j\)</span> は、j 番目の固有値、d は全固有値の数（元々の特徴量の数/次元数）。</p>
+<p>分散説明率を見ることで、その主成分が特徴量全体がもつ情報のうち、どれぐらいの情報を表すことができているかを確認できる。<br />
+以下に、分散説明率と、その累積和をプロットする。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 固有値の合計</span>
+<span class="n">tot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">eigen_vals</span><span class="p">)</span>
+<span class="c1"># 分散説明率の配列を作成</span>
+<span class="n">var_exp</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span> <span class="o">/</span> <span class="n">tot</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eigen_vals</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+<span class="c1"># 分散説明率の累積和を作成</span>
+<span class="n">cum_var_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">var_exp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">var_exp</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;individual explained variance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">cum_var_exp</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cumulative explained variance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Explained variance ratio&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Principal component index&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&#39;images/05_02.png&#39;, dpi=300)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_26_0.png" src="_images/pca_26_0.png" />
+</div>
+</div>
+<p>グラフから以下のことがわかる。</p>
+<ul class="simple">
+<li><p>最初の主成分だけで、全体の約 4 割の分散を占めている</p></li>
+<li><p>2 つの主成分も用いるだけで、もともとあった特徴量全体の約 6 割を説明できている</p></li>
+</ul>
+</div>
+<div class="section" id="factor-loading">
+<h2>因子負荷量 (Factor loading)<a class="headerlink" href="#factor-loading" title="Permalink to this headline">¶</a></h2>
+<p>各主成分軸の意味を知るためには、因子負荷量を見れば良い。
+因子負荷量とは、主成分軸における値と、変換前の軸における値との間の相関値のことである。</p>
+<p>この相関が大きくなるほど、その特徴量が、その主成分に寄与する程度が大きいということを意味している。</p>
+<p>Ref: <a class="reference external" href="https://statistics.co.jp/reference/software_R/statR_9_principal.pdf">https://statistics.co.jp/reference/software_R/statR_9_principal.pdf</a></p>
+</div>
+<div class="section" id="feature-transformation">
+<h2>特徴変換 (Feature transformation)<a class="headerlink" href="#feature-transformation" title="Permalink to this headline">¶</a></h2>
+<p>射影（変換）行列を取得し、適用して特徴変換を行う。</p>
+<hr class="docutils" />
+<p><span class="math notranslate nohighlight">\(X' = XW\)</span></p>
+<p><span class="math notranslate nohighlight">\(X'\)</span> : 射影（変換）後の座標（行列）<br />
+<span class="math notranslate nohighlight">\(X\)</span> : もともとの座標（行列）<br />
+<span class="math notranslate nohighlight">\(W\)</span> : 射影（変換）行列</p>
+<p><span class="math notranslate nohighlight">\(W\)</span> は、次元削減後の次元数の固有ベクトルから構成される。</p>
+<p><span class="math notranslate nohighlight">\(W = [v_1 v_2 ... v_k] \in \mathbb{R} ^{n\times k}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a list of (eigenvalue, eigenvector) tuples</span>
+<span class="n">eigen_pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eigen_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">eigen_vecs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+               <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigen_vals</span><span class="p">))]</span>
+
+<span class="c1"># Sort the (eigenvalue, eigenvector) tuples from high to low</span>
+<span class="n">eigen_pairs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>まずは、次元削減を行わずに、13 次元 –&gt; 13 次元の座標変換を見てみる<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p><span class="math notranslate nohighlight">\(X' = XW\)</span></p>
+<p><span class="math notranslate nohighlight">\(W = [v_1 v_2 ... v_13] \in \mathbb{R} ^{13\times 13}\)</span><br />
+<span class="math notranslate nohighlight">\(x \in \mathbb{R} ^{13}\)</span><br />
+<span class="math notranslate nohighlight">\(x' \in \mathbb{R} ^{13}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 変換行列 w の作成</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">eigen_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigen_pairs</span><span class="p">)):</span>
+  <span class="c1"># print(i)</span>
+  <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">eigen_pairs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+<span class="n">w</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(13, 13)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 座標変換</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">X_train_std</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="c1"># print(X_train_pca.shape)</span>
+
+<span class="n">cov_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X_train_pca</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># 共分散行列のヒートマップ</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cov_mat</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGnBu&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_33_0.png" src="_images/pca_33_0.png" />
+</div>
+</div>
+<p>主成分空間に変換後の各特徴量は、互いに相関が全くないことがわかる（互いに線形独立）。<br />
+対角成分は分散値であり、第1主成分から大きい順に並んでいることがわかる。</p>
+</div>
+<div class="section" id="id6">
+<h3>座標変換された空間から元の空間への復元<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>座標変換された空間から元の空間への復元<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p><span class="math notranslate nohighlight">\(X = X'W^T\)</span></p>
+<p><span class="math notranslate nohighlight">\(X'\)</span> : 座標変換後の座標（行列）<br />
+<span class="math notranslate nohighlight">\(X\)</span> : もともとの空間に復元された座標（行列）<br />
+<span class="math notranslate nohighlight">\(W^T \in \mathbb{R} ^{n\times n}\)</span> : 転置された変）行列</p>
+<p><span class="math notranslate nohighlight">\(x' \in \mathbb{R} ^{n}\)</span><br />
+<span class="math notranslate nohighlight">\(x_{approx} \in \mathbb{R} ^{n}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1つ目のサンプルに射影行列を適用（内積を作用させる）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">X_train_std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;もともとの特徴量:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">)</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;変換後の特徴量:&#39;</span><span class="p">,</span> <span class="n">z0</span><span class="p">)</span>
+<span class="n">x0_reconstructed</span> <span class="o">=</span> <span class="n">z0</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;復元された特徴量:&#39;</span><span class="p">,</span> <span class="n">x0_reconstructed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>もともとの特徴量: [ 0.71225893  2.22048673 -0.13025864  0.05962872 -0.50432733 -0.52831584
+ -1.24000033  0.84118003 -1.05215112 -0.29218864 -0.20017028 -0.82164144
+ -0.62946362]
+変換後の特徴量: [ 2.38299011  0.45458499  0.22703207  0.57988399 -0.57994169 -1.73317476
+ -0.70180475 -0.21617248  0.23666876  0.16548767 -0.29726982 -0.23489704
+  0.40161994]
+復元された特徴量: [ 0.71225893  2.22048673 -0.13025864  0.05962872 -0.50432733 -0.52831584
+ -1.24000033  0.84118003 -1.05215112 -0.29218864 -0.20017028 -0.82164144
+ -0.62946362]
+</pre></div>
+</div>
+</div>
+</div>
+<p>完全に復元できていることがわかる。</p>
+<div class="section" id="id8">
+<h3>13 次元 –&gt; 2 次元に次元削減する<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p><span class="math notranslate nohighlight">\(X' = XW\)</span></p>
+<p><span class="math notranslate nohighlight">\(W = [v_1 v_2] \in \mathbb{R} ^{13\times 2}\)</span><br />
+<span class="math notranslate nohighlight">\(x \in \mathbb{R} ^{13}\)</span><br />
+<span class="math notranslate nohighlight">\(x' \in \mathbb{R} ^{2}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">eigen_pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+               <span class="n">eigen_pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matrix W:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matrix W:
+ [[-0.13724218  0.50303478]
+ [ 0.24724326  0.16487119]
+ [-0.02545159  0.24456476]
+ [ 0.20694508 -0.11352904]
+ [-0.15436582  0.28974518]
+ [-0.39376952  0.05080104]
+ [-0.41735106 -0.02287338]
+ [ 0.30572896  0.09048885]
+ [-0.30668347  0.00835233]
+ [ 0.07554066  0.54977581]
+ [-0.32613263 -0.20716433]
+ [-0.36861022 -0.24902536]
+ [-0.29669651  0.38022942]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>注意</strong></p>
+<p>NumPy と LAPACK のバージョンによっては、上記の例とは符号が反転した射影行列 w が作成されることがあるが、問題はない。<br />
+以下の式が成り立つからである。</p>
+<p>行列 <span class="math notranslate nohighlight">\(\Sigma\)</span> に対して、 <span class="math notranslate nohighlight">\(v\)</span> が固有ベクトル、<span class="math notranslate nohighlight">\(\lambda\)</span> が固有値のとき、<br />
+$<span class="math notranslate nohighlight">\(\Sigma v = \lambda v,\)</span>$</p>
+<p>ここで <span class="math notranslate nohighlight">\(-v\)</span> もまた同じ固有値をもつ固有ベクトルとなる。<br />
+$<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\lambda v = \lambda \cdot (-v).\)</span>$</p>
+<p>(主成分軸のベクトルの向きの違い）</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 各サンプルに射影行列を適用（内積を作用）させることで、変換後の座標（特徴量）を得ることができる。</span>
+<span class="n">X_train_std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([2.38299011, 0.45458499])
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id9">
+<h3>2次元に射影後の全データを、ラベルごとに色付けしてプロットする<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">X_train_std</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">]</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="n">colors</span><span class="p">,</span> <span class="n">markers</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+                <span class="n">X_train_pca</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> 
+                <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">l</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;PC 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PC 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&#39;images/05_03.png&#39;, dpi=300)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_44_0.png" src="_images/pca_44_0.png" />
+</div>
+</div>
+<p>PC1 軸方向をみると、PC2 軸方向よりもよりもデータが広く分布しており、データをよりよく区別できていることがわかる。</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>次元削減された空間から元の空間への復元<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p><span class="math notranslate nohighlight">\(X_{approx} = X'W^T\)</span></p>
+<p><span class="math notranslate nohighlight">\(X'\)</span> : 射影後の座標（行列）<br />
+<span class="math notranslate nohighlight">\(X_{approx}\)</span> : もともとの空間に、近似的に、復元された座標（行列）<br />
+<span class="math notranslate nohighlight">\(W^T \in \mathbb{R} ^{n\times k}\)</span> : 転置された射影（変換）行列</p>
+<p><span class="math notranslate nohighlight">\(x' \in \mathbb{R} ^{k}\)</span><br />
+<span class="math notranslate nohighlight">\(x_{approx} \in \mathbb{R} ^{n}\)</span></p>
+<p><span class="math notranslate nohighlight">\(k = n\)</span> のとき、<span class="math notranslate nohighlight">\(X = X_{approx}\)</span> が成り立つ（上述）。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1つ目のサンプルに射影行列を適用（内積を作用させる）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">X_train_std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;もともとの特徴量:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">)</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;変換後の特徴量:&#39;</span><span class="p">,</span> <span class="n">z0</span><span class="p">)</span>
+<span class="n">x0_reconstructed</span> <span class="o">=</span> <span class="n">z0</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;復元された特徴量:&#39;</span><span class="p">,</span> <span class="n">x0_reconstructed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>もともとの特徴量: [ 0.71225893  2.22048673 -0.13025864  0.05962872 -0.50432733 -0.52831584
+ -1.24000033  0.84118003 -1.05215112 -0.29218864 -0.20017028 -0.82164144
+ -0.62946362]
+変換後の特徴量: [2.38299011 0.45458499]
+復元された特徴量: [-0.09837469  0.66412622  0.05052458  0.44153949 -0.23613841 -0.91525549
+ -1.00494135  0.76968396 -0.72702683  0.42993247 -0.87134462 -0.9915977
+ -0.53417827]
+</pre></div>
+</div>
+</div>
+</div>
+<p>完全には復元できていないことがわかる（近似値に復元される）。</p>
+</div>
+<div class="section" id="principal-component-analysis-in-scikit-learn">
+<h2>Principal component analysis in scikit-learn<a class="headerlink" href="#principal-component-analysis-in-scikit-learn" title="Permalink to this headline">¶</a></h2>
+<p>上記で行った PCA の実装は、scikit-learn を使うことで簡単に実装できる。
+以下にその実装を示す。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">()</span>
+<span class="c1"># 主成分分析の実行</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+<span class="c1"># 分散説明率の表示</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.36951469, 0.18434927, 0.11815159, 0.07334252, 0.06422108,
+       0.05051724, 0.03954654, 0.02643918, 0.02389319, 0.01629614,
+       0.01380021, 0.01172226, 0.00820609])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 分散説明率とその累積和のプロット</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">),</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Explained variance ratio&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Principal components&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_52_0.png" src="_images/pca_52_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2次元に削減</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+<span class="n">X_test_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2次元空間にプロット</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_train_pca</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;PC 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PC 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_54_0.png" src="_images/pca_54_0.png" />
+</div>
+</div>
+<div class="section" id="id11">
+<h3>因子負荷量の確認<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>以下のように、<code class="docutils literal notranslate"><span class="pre">pca.components_</span></code> を見ることで、因子負荷量を確認することができる。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="n">df_wine</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PC1&#39;</span><span class="p">,</span><span class="s1">&#39;PC2&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;PC1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PC1</th>
+      <th>PC2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Flavanoids</th>
+      <td>-0.417351</td>
+      <td>-0.022873</td>
+    </tr>
+    <tr>
+      <th>Total phenols</th>
+      <td>-0.393770</td>
+      <td>0.050801</td>
+    </tr>
+    <tr>
+      <th>OD280/OD315 of diluted wines</th>
+      <td>-0.368610</td>
+      <td>-0.249025</td>
+    </tr>
+    <tr>
+      <th>Hue</th>
+      <td>-0.326133</td>
+      <td>-0.207164</td>
+    </tr>
+    <tr>
+      <th>Proanthocyanins</th>
+      <td>-0.306683</td>
+      <td>0.008352</td>
+    </tr>
+    <tr>
+      <th>Proline</th>
+      <td>-0.296697</td>
+      <td>0.380229</td>
+    </tr>
+    <tr>
+      <th>Magnesium</th>
+      <td>-0.154366</td>
+      <td>0.289745</td>
+    </tr>
+    <tr>
+      <th>Alcohol</th>
+      <td>-0.137242</td>
+      <td>0.503035</td>
+    </tr>
+    <tr>
+      <th>Ash</th>
+      <td>-0.025452</td>
+      <td>0.244565</td>
+    </tr>
+    <tr>
+      <th>Color intensity</th>
+      <td>0.075541</td>
+      <td>0.549776</td>
+    </tr>
+    <tr>
+      <th>Alcalinity of ash</th>
+      <td>0.206945</td>
+      <td>-0.113529</td>
+    </tr>
+    <tr>
+      <th>Malic acid</th>
+      <td>0.247243</td>
+      <td>0.164871</td>
+    </tr>
+    <tr>
+      <th>Nonflavanoid phenols</th>
+      <td>0.305729</td>
+      <td>0.090489</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>値の絶対値が大きい特徴量を見れば良い。</p>
+<p>つまり、第１主成分 (PC1) でよく表されている特徴量は、 “Flavanoids” と “Total phenols” である。
+一方、第２主成分 (PC2) でよく表されている特徴量は、 “Color intensity” と “Alcohol” である。</p>
+</div>
+</div>
+<div class="section" id="id12">
+<h2>2次元に次元削減された特徴量を用いてロジスティック回帰を行ってみる<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+
+<span class="k">def</span> <span class="nf">plot_decision_regions</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classifier</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+
+    <span class="c1"># setup marker generator and color map</span>
+    <span class="n">markers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;lightgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">))])</span>
+
+    <span class="c1"># plot the decision surface</span>
+    <span class="n">x1_min</span><span class="p">,</span> <span class="n">x1_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">x2_min</span><span class="p">,</span> <span class="n">x2_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">xx1</span><span class="p">,</span> <span class="n">xx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x1_min</span><span class="p">,</span> <span class="n">x1_max</span><span class="p">,</span> <span class="n">resolution</span><span class="p">),</span>
+                           <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x2_min</span><span class="p">,</span> <span class="n">x2_max</span><span class="p">,</span> <span class="n">resolution</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xx1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">xx2</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx1</span><span class="p">,</span> <span class="n">xx2</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xx1</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xx1</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">xx2</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xx2</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># plot class samples</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">cl</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+                    <span class="n">y</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">cl</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> 
+                    <span class="n">c</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span>
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> 
+                    <span class="n">label</span><span class="o">=</span><span class="n">cl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Training logistic regression classifier using the first 2 principal components.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+<span class="n">X_test_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">)</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># lr = LogisticRegression(penalty=&#39;none&#39;)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">X_train_pca</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(124, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cumulative explained variance ratio:&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cumulative explained variance ratio: 0.5538639565949177
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id13">
+<h3>学習時間の計測<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> lr.fit(X_train_pca, y_train)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100 loops, best of 3: 5.08 ms per loop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy 0.9838709677419355
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce286d1a90&gt;
+</pre></div>
+</div>
+<img alt="_images/pca_66_2.png" src="_images/pca_66_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="id14">
+<h3>トレーニングデータセットの予測結果<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;PC 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PC 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&#39;images/05_04.png&#39;, dpi=300)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+</pre></div>
+</div>
+<img alt="_images/pca_68_1.png" src="_images/pca_68_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="id15">
+<h3>テストデータに対する予測結果<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_pca</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_test_pca</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy 0.9259259259259259
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce28309710&gt;
+</pre></div>
+</div>
+<img alt="_images/pca_70_2.png" src="_images/pca_70_2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_test_pca</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;PC 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PC 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&#39;images/05_05.png&#39;, dpi=300)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+&#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
+</pre></div>
+</div>
+<img alt="_images/pca_71_1.png" src="_images/pca_71_1.png" />
+</div>
+</div>
+<p>次元削減せずに全てのの主成分を取得したい場合は、 <code class="docutils literal notranslate"><span class="pre">n_components=None</span></code> にする。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.36951469, 0.18434927, 0.11815159, 0.07334252, 0.06422108,
+       0.05051724, 0.03954654, 0.02643918, 0.02389319, 0.01629614,
+       0.01380021, 0.01172226, 0.00820609])
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>3 次元に次元削減された特徴量を用いてロジスティック回帰を行ってみる<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+<span class="n">X_test_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">)</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># lr = LogisticRegression(penalty=&#39;none&#39;)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">X_train_pca</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(124, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cumulative explained variance ratio:&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cumulative explained variance ratio: 0.6720155475408875
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> lr.fit(X_train_pca, y_train)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100 loops, best of 3: 6.02 ms per loop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_train_pca</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>accuracy 0.9838709677419355
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce286b1a90&gt;
+</pre></div>
+</div>
+<img alt="_images/pca_79_2.png" src="_images/pca_79_2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="c1"># ax.scatter(X_train_pca[:,0], X_train_pca[:,1], X_train_pca[:,2], c=&#39;r&#39;, marker=&#39;o&#39;)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train_pca</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;PC1&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;PC2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;PC3&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/pca_80_0.png" src="_images/pca_80_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plotly を使った interactive な 3D 散布図</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PC1&#39;</span><span class="p">,</span> <span class="s1">&#39;PC2&#39;</span><span class="p">,</span> <span class="s1">&#39;PC3&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_3d</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;PC1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;PC2&#39;</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="s1">&#39;PC3&#39;</span><span class="p">,</span>
+              <span class="n">color</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
+                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>    
+            <div id="8d639165-aa6b-4c51-87ba-5c4b3bd161f3" class="plotly-graph-div" style="height:525px; width:100%;"></div>
+            <script type="text/javascript">
+
+                    window.PLOTLYENV=window.PLOTLYENV || {};
+
+                if (document.getElementById("8d639165-aa6b-4c51-87ba-5c4b3bd161f3")) {
+                    Plotly.newPlot(
+                        '8d639165-aa6b-4c51-87ba-5c4b3bd161f3',
+                        [{"hoverlabel": {"namelength": 0}, "hovertemplate": "PC1=%{x}<br>PC2=%{y}<br>PC3=%{z}<br>label=%{marker.color}", "legendgroup": "", "marker": {"color": [3, 1, 1, 1, 3, 2, 2, 3, 2, 2, 2, 1, 2, 3, 1, 3, 2, 1, 3, 3, 2, 1, 2, 2, 2, 2, 3, 1, 2, 2, 1, 1, 3, 1, 2, 1, 1, 2, 3, 3, 1, 3, 3, 3, 1, 2, 3, 3, 2, 3, 2, 2, 2, 1, 2, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 3, 1, 2, 3, 2, 2, 3, 1, 2, 1, 2, 2, 3, 2, 1, 1, 1, 3, 2, 1, 1, 2, 2, 3, 3, 2, 1, 1, 2, 2, 3, 1, 3, 1, 2, 2, 2, 2, 1, 3, 1, 1, 1, 1, 2, 2, 3, 3, 2, 2], "coloraxis": "coloraxis", "opacity": 0.7, "symbol": "circle"}, "mode": "markers", "name": "", "scene": "scene", "showlegend": false, "type": "scatter3d", "x": [2.38299010628165, -1.9657818342761368, -2.5390759826731437, -1.4301077634823764, 3.1414722743374535, 0.5025355174304724, 0.048677216444456356, 2.478889890837675, 2.0190025895476813, 0.7515658263299464, 0.7226891496983433, -3.0036621050580106, 2.575188784771916, 3.7315110360943025, -1.1227651833811303, 2.8599685344062253, -0.7471712452249434, -1.5842787774162708, 3.3888710052679927, 3.154054730027625, -1.2803650563636255, -1.7143891145760053, -1.5504029140397453, 1.1098448898248685, -0.6910841834221154, -2.0860359990382626, 2.9039345555832674, -2.0763578431192635, -1.7475618546062412, 2.594244559712473, -2.5037235506940494, -2.1944840194590016, 3.9163453413579057, -1.1173961847439984, -0.8999680418605585, -1.7146917780649822, -2.4858130250697856, -0.7608056164374378, 2.9265370962579427, 2.9442371639540426, -2.389932189360117, 2.638850494578335, 2.51009031453245, 3.6524808642815887, -2.6516960860534327, 0.5254455878346656, 2.7019757342128936, 3.184147081997617, 1.1251704080946257, 2.923665189936381, -1.9612231430392655, 0.5447367346888976, -0.7703030782492855, -1.1667045525555042, -1.3647530932690284, 0.4356373211295947, 2.961917452749134, 2.8360955735919395, 1.9040208928654767, -2.485839098390368, -2.165755675041433, 0.006697760954698862, 1.065601807991443, 2.1311791064704395, 1.5354348318688578, -2.6678311196413826, 0.5727999846207674, -0.7071091585977504, -0.9960657676095674, -2.6732415348111105, -2.3636737797286114, -0.39171874937152845, -2.989088448563118, -1.9182253898038528, 2.3114458032411545, -1.0605050296925769, -2.7485860866279204, 2.266500773662799, -1.1551746905921498, 0.16602502953654413, 1.3558938936752154, -3.311850567401112, -0.33245686428865434, -2.2320508545598754, 0.1858375793819492, 0.8456085631947511, 2.695004718284889, 0.4464567413734273, -1.8896100733724928, -3.081317605096027, -3.4571634848499873, 3.8766562871337222, 1.575515996805267, -3.4334437068095607, -4.206425966320472, -0.14042970769668142, 1.8273152077183488, 2.2056474409250013, 1.6499905365619116, -1.461103297067776, -0.60047516329304, -3.082762313096913, 0.450357491433118, 0.9080689663896474, 3.2497363711740253, -3.0788205461527727, 2.5427730604375243, -2.8483815700907678, -0.889972711099617, 0.32368249266219995, 0.32007526662162156, 0.4488918764416006, -2.4658255817715466, 2.8167811296155114, -2.1698302538907335, -2.667282287971753, -3.532239235540976, -1.9663768792211023, 1.6874121615416129, 0.4352107672298763, 2.590451154057883, 4.353083972897038, -1.8431537322857185, -0.4086095466800211], "y": [0.45458499212572817, 1.653769389946968, 1.0290906609492259, 0.6024010988851962, 0.6621497927952746, -2.089071314900294, -2.275360439959899, -0.08603318154093348, -1.3538718966099923, -2.5536794688487303, -1.1840439069993787, 0.9462693400710848, -1.0697548993837769, 1.0196887612755863, 0.13877000455001104, 2.2881955863337526, -3.217460605442277, 0.16048054563872385, 2.1155068896594753, 0.5423396606121389, -1.7292687100189417, 0.717452488216606, -1.758059099309678, -1.2048069313885958, -1.7138537379166594, -1.6845367082243832, 1.9525880482264442, 1.4718330358089013, -1.2584254568353685, -0.10560370337047677, 0.7041221157350614, 2.186575516704052, 0.16136475261615515, 0.5192108611268781, -2.047595749541602, 0.6139216924698934, 0.7683956144482913, -1.6761562740805074, 0.1885474069864281, 1.3481238835106775, 1.0848073988606313, 0.7527493656088564, 2.25237952563597, 1.7483992539309818, 1.0199747570259248, -2.1352824927289515, 0.5647630703165921, 2.580946953456133, -1.8505444858696203, 0.41699914819304196, -1.286136607215191, -1.0789722623216003, -1.9338681459723375, 0.004898153278469697, -2.135722694347315, -2.569296070852136, 1.9109100891890225, 0.6538603161616434, -0.3529654196842034, -0.21308835163899584, 1.1468486030611238, -0.9433762379360541, 3.312210247467154, 1.9055130448224509, -1.5085497903961367, 1.7593359879252402, -2.7511382987206985, -2.437985493112964, -1.4772410970859913, 1.3577960886192333, 1.6653792681790593, 0.13747499082853856, 2.169831648464864, 1.6014180917551382, 0.2071229959000705, 0.6004608026867289, -0.29016054005909436, 2.144917577966878, -0.5026290907909564, -2.2685005136961114, 0.33353006517394007, 1.392401154379454, -2.156398650686876, 0.528681428028275, -1.444469666607523, 0.17151684309953996, 2.7452249204468324, -0.6239394338901929, -0.04400723172587037, 1.5972442904902546, 1.2142844243212103, 0.4644600353261582, -1.8229983929101163, 1.6116813964798882, 2.2014536641495304, -2.3687163884609372, -1.3948510277267125, 1.2846206606350752, 2.33211133751735, -0.4648032418097786, 0.009200722248501145, 0.28287147804942203, -2.2026375497519135, -2.088168596057688, -0.18273485467899997, 0.6962262068790516, 1.8857165233678352, 0.6327432521212526, -0.6792722626770021, -2.070061748331748, -2.8870851865821625, -2.148725319680299, 1.074557704273905, 0.5634444415365472, 0.16644198505497165, 1.381377024885905, 2.579060288556329, 1.1831918462821642, -1.3507532086518426, -2.4035581702000854, 1.6385292107546472, 0.6653604055959265, -1.506884150845844, -1.2972060696048262], "z": [-0.2270320677349445, 1.3870926828172951, 1.3255184108244742, 0.5553081171464955, -1.0839324559915855, 1.0409565268777894, -1.043136940468716, -1.2381264084106791, -0.46023961239804284, -1.2442904559566033, -0.0006901709449677448, -0.2886848499539379, -2.114663579181573, -1.1621097950380643, -0.049870947628221834, -0.9409884465852398, -0.9025752942872188, -0.362234984390805, -0.11166595315479734, -1.00148347834704, -0.6782172297299867, -1.1666537965536592, 1.2934197980610458, 2.7685813865986235, 0.72456435628768, -2.6629996000922254, -0.2129967432803451, 0.39670547324227967, 1.715368236746086, 0.23779325588115957, -0.3220419555799858, 1.0184722695099773, 0.2781225838352601, 3.8609222853979954, 0.7872247411571505, -0.09271058996769377, 0.7411087442122195, 0.19616402901118468, 0.02784295032844946, -1.043155169786938, -1.8675884082660665, -0.7265531325606531, -0.6469831655115019, -0.05803122949672302, -0.6857228767678358, 0.838523433846456, -0.8059273250060421, 1.3034770964031852, 0.6335805269535196, 1.1848078786175544, -1.5555128822639182, 0.05617795710660953, -0.5646222046595545, -1.4347649943539271, -0.04635943946032398, 1.990415819259947, -0.6965329166378816, -1.194710330561304, -1.6583042331304751, -0.45242036270388886, 0.30165345090158413, -1.8573548786896341, 1.2702379911598245, 1.0369582400103496, 3.0381148745451902, -0.6606357543398687, 0.4104824511629599, -0.42896009421930675, -0.7178693695222867, -0.612563942487306, 0.4101514355306667, -0.35134368510197816, -0.5493324843743828, 0.8908670287841625, 1.3664242905206578, 2.0239610407823343, 3.3930654789408026, 1.851977902767043, -1.5774139741349285, 0.011883882067901573, -0.9631600022805533, -1.5300218751602022, -0.8651992490155089, 1.3674735481769849, 0.7897928315179916, -0.5613143331253624, -0.6217247339202082, 1.3958062070978248, 0.3199063641477553, -0.24126476283168863, -0.5104173332955815, 1.7330900016773214, 0.41727633077125453, -0.5342364738017759, -1.4373869228383276, -1.4161921536716089, 0.48771348003442977, 0.15647768648544366, 0.581246893460613, 5.164589987839916, -0.9120626727150363, -2.39782355864901, 0.6889949847866246, -1.9141895112102991, -0.7834381724555941, -0.45256558407285535, 0.0010826094164175504, -0.11503852354097888, 0.26738151323259524, -0.22885869746337908, -0.7770952487881233, -0.9367556757341098, 0.47059168411902397, 0.9086122280900272, -1.2563517390889176, -0.283764586021869, -0.3343118958009132, -0.17103925648107232, -0.0333375406320053, 0.9917386515706548, 0.39576068878727394, -1.3173735763612588, 0.2463139455120486, 1.403156024649178]}],
+                        {"coloraxis": {"colorbar": {"title": {"text": "label"}}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "legend": {"tracegroupgap": 0}, "margin": {"t": 60}, "scene": {"domain": {"x": [0.0, 1.0], "y": [0.0, 1.0]}, "xaxis": {"title": {"text": "PC1"}}, "yaxis": {"title": {"text": "PC2"}}, "zaxis": {"title": {"text": "PC3"}}}, "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}},
+                        {"responsive": true}
+                    ).then(function(){
+
+var gd = document.getElementById('8d639165-aa6b-4c51-87ba-5c4b3bd161f3');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })
+                };
+
+            </script>
+        </div>
+</body>
+</html></div></div>
+</div>
+<p>人間の目で確認できるのは 3 次元が限界。</p>
+</div>
+<div class="section" id="id17">
+<h2>次元削減せずにロジスティック回帰を行ってみる<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># lr = LogisticRegression(penalty=&#39;none&#39;)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 学習時間</span>
+<span class="o">%</span><span class="k">timeit</span> lr.fit(X_train_std, y_train)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100 loops, best of 3: 7.24 ms per loop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluation of training dataset&#39;</span><span class="p">)</span>
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_train_std</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluation of test dataset&#39;</span><span class="p">)</span>
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_test_std</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Evaluation of training dataset
+accuracy 1.0
+Evaluation of test dataset
+accuracy 1.0
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce2a4a11d0&gt;
+</pre></div>
+</div>
+<img alt="_images/pca_86_2.png" src="_images/pca_86_2.png" />
+<img alt="_images/pca_86_3.png" src="_images/pca_86_3.png" />
+</div>
+</div>
+<p>元々の全ての特徴量を使って学習させた方が精度が高くなった。<br />
+学習時間は、次元削減したほうがわずかに早くなっている。
+（主成分 2 つで学習した場合 4.9 ms に対し、元々の特徴量全て使った場合 5.64 ms）<br />
+結論として、今回のタスクでは、PCA を適用するべきではなく、すべての特徴量を使用したほうが良い。</p>
+<p>もっとデータ数が大きい場合や、モデルのパラメータ数が多い場合には、次元削減が効果的となる。</p>
+<div class="section" id="id18">
+<h3>2つの特徴量だけでロジスティック回帰を行ってみる<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># lr = LogisticRegression(penalty=&#39;none&#39;)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> lr.fit(X_train_std[:,:2], y_train)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100 loops, best of 3: 3.6 ms per loop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluation of training dataset&#39;</span><span class="p">)</span>
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">y_train</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_train_std</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluation of test dataset&#39;</span><span class="p">)</span>
+<span class="c1"># 精度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="c1"># confusion matrix</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">X_test_std</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Evaluation of training dataset
+accuracy 0.7580645161290323
+Evaluation of test dataset
+accuracy 0.7777777777777778
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce25ebe470&gt;
+</pre></div>
+</div>
+<img alt="_images/pca_91_2.png" src="_images/pca_91_2.png" />
+<img alt="_images/pca_91_3.png" src="_images/pca_91_3.png" />
+</div>
+</div>
+<p>もともとの特徴量を 2 つだけ使った場合、精度はかなり下がる。
+これと比べると、PCA によって特徴抽出した 2 つの主成分を使った場合には、精度がかなり高いことがわかる。</p>
+</div>
+</div>
+<div class="section" id="id19">
+<h2>まとめ<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<p>主成分分析により以下のタスクを行うことができる。</p>
+<ul class="simple">
+<li><p>次元削減</p>
+<ul>
+<li><p>データを格納するためのメモリやディスク使用量を削減できる</p></li>
+<li><p>学習アルゴリズムを高速化できる</p></li>
+</ul>
+</li>
+<li><p>可視化</p>
+<ul>
+<li><p>多数の特徴量（次元）をもつデータを2次元などの理解しやすい空間に落とし込んで議論、解釈することができる。</p></li>
+</ul>
+</li>
+</ul>
+<p>しかし、機械学習の前処理として利用する場合には、以下のことに注意する必要がある。</p>
+<ul class="simple">
+<li><p>次元削減を行うことによって、多少なりとも情報が失われている</p></li>
+<li><p>まずは、すべての特徴量を使ってトレーニングを試すことが大事</p></li>
+<li><p>次元削減によってオーバーフィッティングを防ぐことができるが、次元削減を使う前に正則化を使うべし</p></li>
+<li><p>上記を試してから、それでも望む結果を得られない場合、次元削減を使う</p></li>
+<li><p>機械学習のトレーニングでは、通常は、99% の累積寄与率が得られるように削減後の次元数を選ぶことが多い</p></li>
+</ul>
+<p>参考) <a class="reference external" href="https://www.coursera.org/learn/machine-learning">Andrew Ng先生の講義</a></p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><em>Python Machine Learning 2nd Edition</em> by <a class="reference external" href="https://sebastianraschka.com">Sebastian Raschka</a>, Packt Publishing Ltd. 2017. Code Repository: <a class="reference external" href="https://github.com/rasbt/python-machine-learning-book-2nd-edition">https://github.com/rasbt/python-machine-learning-book-2nd-edition</a></p></li>
+<li><p><a class="reference external" href="https://www.coursera.org/learn/machine-learning">Andrew Ng先生の講義</a></p></li>
+</ol>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "hnishi/jupyterbook-hnishi",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">はじめに</a>
+    <a class='right-next' id="next-link" href="language-models/intro.html" title="next page">自然言語処理</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By hnishi<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
