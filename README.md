@@ -28,8 +28,16 @@ This will automatically push your build to the `gh-pages` branch. More informati
 
 ## Development
 
+Install required packages in venv.
+
 ```
 poetry install --no-root
+```
+
+Build html.
+
+```
+poetry run jupyter-book build jupyterbook_hnishi/
 ```
 
 ## Contributors
