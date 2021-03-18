@@ -2,7 +2,11 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: intro
-- file: pca.ipynb
+- file: data-analysis/intro.md
+  sections:
+    - file: data-analysis/basic_statistic_values.ipynb
+    - file: data-analysis/pca.ipynb
+    - file: data-analysis/clustering.ipynb
 - file: language-models/intro
   sections:
     - file: language-models/easy_try_sentiment_analysis.ipynb
