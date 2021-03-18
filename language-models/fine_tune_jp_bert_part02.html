@@ -318,12 +318,12 @@
         
               <div>
                 
-  <p><a href="https://colab.research.google.com/github/hnishi/handson-language-models/blob/main/fine_tune_jp_bert_part02.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/fine_tune_jp_bert_part02.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
 <div class="section" id="huggingface-transformers-bert-with-google-colab-part02">
 <h1>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02<a class="headerlink" href="#huggingface-transformers-bert-with-google-colab-part02" title="Permalink to this headline">¶</a></h1>
 <p>part01 に引き続いて、今回は、まとまったデータセットを使い、transformers の Trainer class を使いファインチューニングする方法を記載します。</p>
 <p>また、学習後の評価方法に関しても記載します。</p>
-<p>なお、今回はまとまった量 (4000 件程度) のデータを使って学習を行いますので、GPU の使用を推奨します (著者は google colab を使用して動作確認しています)。</p>
+<p>なお、今回はまとまった量 (5000 件) のデータを使って学習を行いますので、GPU の使用を推奨します (著者は google colab を使用して動作確認しています)。</p>
 <hr class="docutils" />
 <p>この記事は、part02 です。</p>
 <p>すべての記事の目次は以下をご参照ください。</p>
@@ -341,14 +341,6 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q transformers
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 1.9MB 7.7MB/s 
-     |████████████████████████████████| 3.2MB 36.1MB/s 
-     |████████████████████████████████| 890kB 51.3MB/s 
-?25h  Building wheel for sacremoses (setup.py) ... ?25l?25hdone
 </pre></div>
 </div>
 </div>
@@ -395,7 +387,9 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100  473k  100  473k    0     0  2151k      0 --:--:-- --:--:-- --:--:-- 2151k
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100  473k  100  473k    0     0  3093k      0 --:--:-- --:--:-- --:--:-- 3093k
 </pre></div>
 </div>
 </div>
@@ -496,7 +490,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 <div class="section" id="id5">
 <h3>ラベルごとのデータ件数の確認<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>全体的に、positive なラベルが多いようです。</p>
-<p>したがって、¥学習の結果 positive に極端に判定されやすいモデルとなってしまう可能性があるため注意が必要です。</p>
+<p>したがって、学習の結果 positive に極端に判定されやすいモデルとなってしまう可能性があるため注意が必要です。</p>
 <p>評価指標に accuracy ではなく、F1 score などの不均衡データに関しても正しく評価できるものを選択する必要があります。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -505,7 +499,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7feb63f13310&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f4bbdc20dd0&gt;
 </pre></div>
 </div>
 <img alt="../_images/fine_tune_jp_bert_part02_11_1.png" src="../_images/fine_tune_jp_bert_part02_11_1.png" />
@@ -518,7 +512,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 <p>usage が train と dev のサンプルを学習用、test のサンプルをテスト用として分割します。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;usage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;train&quot;</span> <span class="ow">or</span> <span class="s2">&quot;val&quot;</span><span class="p">)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;usage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;usage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dev&quot;</span><span class="p">)]</span>
 <span class="n">train_docs</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="n">train_labels</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">train_docs</span><span class="p">)</span>
@@ -526,7 +520,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3888
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5000
 </pre></div>
 </div>
 </div>
@@ -568,6 +562,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
+<span class="c1"># model_name = &quot;cl-tohoku/bert-base-japanese-v2&quot;</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">BertForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -576,16 +571,6 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "b0b627dfb3734752bd2ca0b0b9e9d291", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "49c3a662adfd4e4ab8018ea463b88b56", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForSequenceClassification: [&#39;cls.predictions.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.decoder.weight&#39;, &#39;cls.predictions.decoder.bias&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.seq_relationship.bias&#39;]
 - This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
@@ -593,14 +578,18 @@ Some weights of BertForSequenceClassification were not initialized from the mode
 You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "01f7080efd7249b3a23a9815827ddbf2", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "ec3fba1c34f345ea9912e2aa89431001", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_name = &quot;cl-tohoku/bert-base-japanese-v2&quot;</span>
+
+<span class="c1"># model = BertForSequenceClassification.from_pretrained(model_name, num_labels=3)</span>
+<span class="c1"># # model = model.to(device)</span>
+<span class="c1"># tokenizer = BertTokenizer.from_pretrained(model_name)</span>
+
+<span class="c1"># unmasker = pipeline(&#39;sentiment-analysis&#39;, model=model, tokenizer=tokenizer)</span>
+<span class="c1"># unmasker(&quot;こんにちは、私は[MASK]モデルです。&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -671,7 +660,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 </div>
-<p>1 epoch で試したときは、学習に GPU を使い 2 分程度かかりました。</p>
+<p>1 epoch で試したときは、学習に GPU を使い 7 分程度かかりました。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span>
@@ -720,8 +709,8 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
             }
         </style>
 
-      <progress value='243' max='243' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      [243/243 05:21, Epoch 1/1]
+      <progress value='313' max='313' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      [313/313 06:48, Epoch 1/1]
     </div>
     <table border="1" class="dataframe">
   <thead>
@@ -740,50 +729,72 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
   <tbody>
     <tr>
       <td>50</td>
-      <td>0.912000</td>
-      <td>0.869623</td>
-      <td>0.611212</td>
-      <td>0.470534</td>
-      <td>0.559272</td>
-      <td>0.611212</td>
-      <td>10.780300</td>
-      <td>51.297000</td>
+      <td>0.971000</td>
+      <td>0.861671</td>
+      <td>0.613020</td>
+      <td>0.471907</td>
+      <td>0.560379</td>
+      <td>0.613020</td>
+      <td>9.488000</td>
+      <td>58.284000</td>
     </tr>
     <tr>
       <td>100</td>
-      <td>0.844600</td>
-      <td>0.743053</td>
-      <td>0.665461</td>
-      <td>0.584265</td>
-      <td>0.633969</td>
-      <td>0.665461</td>
-      <td>10.670700</td>
-      <td>51.824000</td>
+      <td>0.789400</td>
+      <td>0.729147</td>
+      <td>0.674503</td>
+      <td>0.598595</td>
+      <td>0.583529</td>
+      <td>0.674503</td>
+      <td>9.905000</td>
+      <td>55.831000</td>
     </tr>
     <tr>
       <td>150</td>
-      <td>0.752400</td>
-      <td>0.628209</td>
-      <td>0.728752</td>
-      <td>0.705608</td>
-      <td>0.733463</td>
-      <td>0.728752</td>
-      <td>10.741600</td>
-      <td>51.482000</td>
+      <td>0.675000</td>
+      <td>0.554705</td>
+      <td>0.779385</td>
+      <td>0.767605</td>
+      <td>0.771707</td>
+      <td>0.779385</td>
+      <td>10.314800</td>
+      <td>53.612000</td>
     </tr>
     <tr>
       <td>200</td>
-      <td>0.645400</td>
-      <td>0.522036</td>
-      <td>0.761302</td>
-      <td>0.754351</td>
-      <td>0.758591</td>
-      <td>0.761302</td>
-      <td>10.813100</td>
-      <td>51.142000</td>
+      <td>0.607900</td>
+      <td>0.552425</td>
+      <td>0.784810</td>
+      <td>0.777542</td>
+      <td>0.783580</td>
+      <td>0.784810</td>
+      <td>10.540500</td>
+      <td>52.464000</td>
+    </tr>
+    <tr>
+      <td>250</td>
+      <td>0.588500</td>
+      <td>0.573790</td>
+      <td>0.783002</td>
+      <td>0.763487</td>
+      <td>0.790463</td>
+      <td>0.783002</td>
+      <td>10.539200</td>
+      <td>52.471000</td>
+    </tr>
+    <tr>
+      <td>300</td>
+      <td>0.536700</td>
+      <td>0.678761</td>
+      <td>0.790235</td>
+      <td>0.772964</td>
+      <td>0.788712</td>
+      <td>0.790235</td>
+      <td>10.569100</td>
+      <td>52.322000</td>
     </tr>
   </tbody>
-</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=243, training_loss=0.7476195975095646, metrics={&#39;train_runtime&#39;: 322.8845, &#39;train_samples_per_second&#39;: 0.753, &#39;total_flos&#39;: 936757749027744, &#39;epoch&#39;: 1.0})
+</table><p></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TrainOutput(global_step=313, training_loss=0.6892438376673494, metrics={&#39;train_runtime&#39;: 409.9831, &#39;train_samples_per_second&#39;: 0.763, &#39;total_flos&#39;: 1204678175190000.0, &#39;epoch&#39;: 1.0, &#39;init_mem_cpu_alloc_delta&#39;: 324306, &#39;init_mem_gpu_alloc_delta&#39;: 0, &#39;init_mem_cpu_peaked_delta&#39;: 18306, &#39;init_mem_gpu_peaked_delta&#39;: 0, &#39;train_mem_cpu_alloc_delta&#39;: 583921, &#39;train_mem_gpu_alloc_delta&#39;: 4050281472, &#39;train_mem_cpu_peaked_delta&#39;: 470185, &#39;train_mem_gpu_peaked_delta&#39;: 4312785408})
 </pre></div>
 </div>
 </div>
@@ -813,16 +824,20 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
     </style>
 
   <progress value='9' max='9' style='width:300px; height:20px; vertical-align: middle;'></progress>
-  [9/9 00:09]
+  [9/9 00:08]
 </div>
 </div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;epoch&#39;: 1.0,
- &#39;eval_accuracy&#39;: 0.755877034358047,
- &#39;eval_f1&#39;: 0.7268075608453904,
- &#39;eval_loss&#39;: 0.6674010157585144,
- &#39;eval_precision&#39;: 0.762758084435675,
- &#39;eval_recall&#39;: 0.755877034358047,
- &#39;eval_runtime&#39;: 10.7683,
- &#39;eval_samples_per_second&#39;: 51.355}
+ &#39;eval_accuracy&#39;: 0.7631103074141049,
+ &#39;eval_f1&#39;: 0.7598697815128607,
+ &#39;eval_loss&#39;: 0.5741994976997375,
+ &#39;eval_mem_cpu_alloc_delta&#39;: 70009,
+ &#39;eval_mem_cpu_peaked_delta&#39;: 18278,
+ &#39;eval_mem_gpu_alloc_delta&#39;: 0,
+ &#39;eval_mem_gpu_peaked_delta&#39;: 287763968,
+ &#39;eval_precision&#39;: 0.7602917592292109,
+ &#39;eval_recall&#39;: 0.7631103074141049,
+ &#39;eval_runtime&#39;: 9.4023,
+ &#39;eval_samples_per_second&#39;: 58.816}
 </pre></div>
 </div>
 </div>
@@ -830,8 +845,9 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 <div class="section" id="id8">
 <h2>評価<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
-<p>上記のテストデータの評価結果を見ると、</p>
-<p>ちなみに、以下を入れて parameter を freeze させて fine tuning を行った場合は、accuracy が 0.60、F1 値が 0.46 となり、かなり低くなってしまいました。</p>
+<p>上記のテストデータの評価結果を見ると、accuracy が 0.75 F1 score が 0.72 で結構良いのではないでしょうか。</p>
+<p>さらに epoch 数を増やすことで性能の向上が見込めそうです。</p>
+<p>ちなみに、以下のように parameter を freeze させて fine tuning を行った場合は、accuracy が 0.60、F1 値が 0.46 と、かなり低くなってしまいました。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
     <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
@@ -867,7 +883,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
-<span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">),</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -879,7 +895,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.9585415720939636}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.9541889429092407}]
 </pre></div>
 </div>
 </div>
@@ -891,7 +907,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.7770922780036926}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.9038146734237671}]
 </pre></div>
 </div>
 </div>
