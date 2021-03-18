@@ -1,0 +1,1033 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>基本的な統計量とガウス分布 &#8212; ハンズオン資料</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="canonical" href="http://jupyterbook.hnishi.com/data-analysis/basic_statistic_values.html" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="主成分分析 （主成分解析、Principal component analysis : PCA）" href="pca.html" />
+    <link rel="prev" title="データ分析" href="intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="http://jupyterbook.hnishi.com/data-analysis/basic_statistic_values.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="基本的な統計量とガウス分布" />
+<meta property="og:description" content="基本的な統計量とガウス分布  要約統計量の概要  要約統計量とは、標本の分布の特徴を代表的に（要約して）表す統計学上の値であり、統計量の一種  主にデータの分布の中心や拡がりなどを表わす  基本統計量、記述統計量、代表値とも呼ばれる  以下は、要約統計量の例  モーメントから求められる要約統計量  平均  分散、標準偏" />
+
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">ハンズオン資料</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   はじめに
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="intro.html">
+   データ分析
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     基本的な統計量とガウス分布
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pca.html">
+     主成分分析 （主成分解析、Principal component analysis : PCA）
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="clustering.html">
+     クラスタ分析
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../language-models/intro.html">
+   自然言語処理
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../language-models/easy_try_sentiment_analysis.html">
+     Python で日本語文章の感情分析を簡単に試す (with google colab)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../language-models/fine_tune_jp_bert_part01.html">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../language-models/fine_tune_jp_bert_part02.html">
+     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/data-analysis/basic_statistic_values.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/hnishi/jupyterbook-hnishi/issues/new?title=Issue%20on%20page%20%2Fdata-analysis/basic_statistic_values.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/hnishi/jupyterbook-hnishi/edit/main/jupyterbook_hnishi/data-analysis/basic_statistic_values.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/hnishi/jupyterbook-hnishi/main?urlpath=tree/jupyterbook_hnishi/data-analysis/basic_statistic_values.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/main/jupyterbook_hnishi/data-analysis/basic_statistic_values.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   要約統計量の概要
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   モーメントから求められる要約統計量
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     平均
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id5">
+     分散、標準偏差
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     歪度
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     尖度
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id8">
+   順序から求められる要約統計量
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id9">
+     中央値
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     刈込平均（トリム平均）
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id12">
+     四分位点
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id13">
+     最小値・最大値
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id14">
+       中点値
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id15">
+       範囲
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   度数から求められる要約統計量
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id17">
+     最頻値
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#unbiased-estimator-of-varianc">
+   不偏分散 (unbiased estimator of varianc)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#iris">
+   IRISデータを使って要約統計量を求めてみる
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#covariance">
+   共分散 (Covariance)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#variance-covariance-matrixcovariance-matrix">
+   分散共分散行列（共分散行列、Variance-covariance matrix、Covariance matrix）
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id18">
+   相関係数
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#normal-distributiongaussian-distrubution">
+   正規分布（ガウス分布、Normal distribution、Gaussian distrubution）
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id19">
+   ガウス分布を人工的に作ってみる
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id20">
+   ガウス分布を iris データセットにあてはめてみる
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id21">
+   ラベル（iris の種別）ごとにガウス分布を描いてみる
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id22">
+   参考
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/basic_statistic_values.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<div class="section" id="id1">
+<h1>基本的な統計量とガウス分布<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>要約統計量の概要<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>要約統計量とは、標本の分布の特徴を代表的に（要約して）表す統計学上の値であり、統計量の一種</p>
+<ul>
+<li><p>主にデータの分布の中心や拡がりなどを表わす</p></li>
+<li><p>基本統計量、記述統計量、代表値とも呼ばれる</p></li>
+</ul>
+</li>
+</ul>
+<p>以下は、要約統計量の例</p>
+<ol class="simple">
+<li><p>モーメントから求められる要約統計量</p></li>
+</ol>
+<ul class="simple">
+<li><p>平均</p></li>
+<li><p>分散、標準偏差</p></li>
+<li><p>歪度</p></li>
+<li><p>尖度</p></li>
+</ul>
+<ol class="simple">
+<li><p>順序から求められる要約統計量</p></li>
+</ol>
+<ul class="simple">
+<li><p>中央値</p></li>
+<li><p>刈込平均（トリム平均）</p></li>
+<li><p>四分位点</p></li>
+<li><p>最小値・最大値</p></li>
+<li><p>中点値</p></li>
+<li><p>範囲</p></li>
+</ul>
+<ol class="simple">
+<li><p>度数から求められる要約統計量</p></li>
+</ol>
+<ul class="simple">
+<li><p>最頻値</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>モーメントから求められる要約統計量<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p><em>N</em> 個のデータ <span class="math notranslate nohighlight">\(x_1,\ x_2,\ \dots,\ x_N\)</span>
+に対する統計量を考える。まず、平均値 <span class="math notranslate nohighlight">\(\mu\)</span> と、平均値まわりの <em>m</em>
+次中央モーメント[1] <span class="math notranslate nohighlight">\(\mu_m\)</span> を</p>
+<div class="math notranslate nohighlight">
+\[\mu = \frac{1}{\,N\,} \sum_{i = 1}^N x_i\]</div>
+<div class="math notranslate nohighlight">
+\[\mu_m = \frac{1}{\,N\,} \sum_{i = 1}^N (x_i - \mu)^m \quad\ (m = 2, 3, \cdots)\]</div>
+<p>で定義する。</p>
+<div class="section" id="id4">
+<h3>平均<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>原点まわりの1次モーメント <span class="math notranslate nohighlight">\(\mu\)</span>。和を個数で割ったもの。</p>
+<div class="math notranslate nohighlight">
+\[\mu = \frac{1}{\,N\,} \sum_{i = 1}^N x_i\]</div>
+</div>
+<div class="section" id="id5">
+<h3>分散、標準偏差<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>2次中央モーメントから求められる統計量。分布の広がりを表す。</p>
+<p>分散：　　 <span class="math notranslate nohighlight">\(\sigma^2 = \mu_2\)</span><br />
+標準偏差： <span class="math notranslate nohighlight">\(\sigma = \sqrt{\mu_2}\)</span></p>
+</div>
+<div class="section" id="id6">
+<h3>歪度<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>3次中央モーメントから求められる統計量。分布の左右非対称の度合いを表す。</p>
+<p><span class="math notranslate nohighlight">\(\gamma_1 = \mu_3 / \sigma^3\)</span></p>
+</div>
+<div class="section" id="id7">
+<h3>尖度<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>4次中央モーメントから求められる統計量。分布の峰の鋭さ（裾野の広さ）を表す。</p>
+<p><span class="math notranslate nohighlight">\(\gamma_2 = \mu_4 / \sigma^4 - 3\)</span></p>
+<p>ただし、3 を引かない定義もある。</p>
+<p>[1]: 用語 「<em>m</em> 次中央モーメント」は、竹内啓（編集委員代表）『統計学辞典』東洋経済新報社,
+1989 による。</p>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>順序から求められる要約統計量<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<p>以下、昇順にソートされた <em>N</em> 個のデータ
+<span class="math notranslate nohighlight">\(x_1 \le x_2 \le \dots \le x_N\)</span> に対する統計量（順序統計量）を考える。</p>
+<div class="section" id="id9">
+<h3>中央値<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>メジアン、メディアン (median)
+ともいう。データの大きさに関してちょうど中央に当たるデータ
+<span class="math notranslate nohighlight">\(x_{(N+1)/2}\)</span>
+。ただし、整数でない添数に対する中央値は線形補間によって定義する（つまり
+<em>N</em> が偶数のときは <span class="math notranslate nohighlight">\(x_{N/2}\)</span> と <span class="math notranslate nohighlight">\(x_{(N+1)/2}\)</span>
+の平均とする）。</p>
+</div>
+<div class="section" id="id10">
+<h3>刈込平均（トリム平均）<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>最大値、最小値を除外した平均。除外する数を増やして行くと、最後は中央値になる。そのため、中央値は刈込平均の一つである<a class="footnote-reference brackets" href="#id23" id="id11">1</a>。</p>
+</div>
+<div class="section" id="id12">
+<h3>四分位点<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>集団を値の大きさで4等分するとき、その境界となる値。<span class="math notranslate nohighlight">\(x_{(N+3)/4}\)</span>
+を第1四分位点、<span class="math notranslate nohighlight">\(x_{(3N+1)/4}\)</span>
+を第3四分位点という。<span class="math notranslate nohighlight">\(x_{(2N+2)/4}\)</span>
+、つまり第2四分位点は中央値である。</p>
+</div>
+<div class="section" id="id13">
+<h3>最小値・最大値<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>集団に含まれる最も小さい値 <span class="math notranslate nohighlight">\(x_1\)</span> と、最も大きい値 <span class="math notranslate nohighlight">\(x_N\)</span> 。</p>
+<p>これらの統計量を視覚化するために、箱ひげ図を用いる。</p>
+<div class="section" id="id14">
+<h4>中点値<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<p>最大値と最小値を足して2で割ったものを中点値とよび、代表値として用いることがある。</p>
+</div>
+<div class="section" id="id15">
+<h4>範囲<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<p>最大値と最小値の差を範囲(range)とよび、代表値として用いることがある。記号はRを用いる。</p>
+</div>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>度数から求められる要約統計量<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="id17">
+<h3>最頻値<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<p>モード (mode)、並み数
+ともいう。データのうち、度数分布において最も高い度数を示す値、つまり最も多く現れているデータの値。</p>
+</div>
+</div>
+<div class="section" id="unbiased-estimator-of-varianc">
+<h2>不偏分散 (unbiased estimator of varianc)<a class="headerlink" href="#unbiased-estimator-of-varianc" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[u^2 = \frac{1}{N-1} \sum_{i = 1}^N (x_i - \mu)^2 \quad\ \]</div>
+<p>不偏分散 <span class="math notranslate nohighlight">\(u^2\)</span></p>
+<p>通常母集団の分散は通常の 分散を、標本から母集団の分散を推測する場合は不偏分散を使う。
+Excel 関数の var() は不偏分散を計算する。</p>
+<p>機械学習の分野では、不偏分散ではなく、上記で説明した分散を使うことが多い。
+（どちらを用いたとしても、似た結果を得ることができ、ほとんど同じ解釈をすることができる）</p>
+<p>参考：<a class="reference external" href="https://www.heisei-u.ac.jp/ba/fukui/pdf/stattext05.pdf">https://www.heisei-u.ac.jp/ba/fukui/pdf/stattext05.pdf</a></p>
+</div>
+<div class="section" id="iris">
+<h2>IRISデータを使って要約統計量を求めてみる<a class="headerlink" href="#iris" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<ul class="simple">
+<li><p>IRISデータとは？</p></li>
+</ul>
+<p>機械学習で有名なデータ．
+IRISは「あやめ」の花を意味しており，UCI（カリフォルニア大学アーバイン校）から機械学習やデータマイニングの検討用データとして配布されている．</p>
+<p>あやめの種類は以下のとおり．</p>
+<ul class="simple">
+<li><p>セトナ(setosa)</p></li>
+<li><p>バーシクル(versicolor)</p></li>
+<li><p>バージニカ(virginica)</p></li>
+</ul>
+<p>このデータを以下の情報から分析する．</p>
+<ul class="simple">
+<li><p>がく片長(Sepal Length)</p></li>
+<li><p>がく片幅(Sepal Width)</p></li>
+<li><p>花びら長(Petal Length)</p></li>
+<li><p>花びら幅(Petal Width)</p></li>
+</ul>
+<p>単位は、いずれも cm。</p>
+<p><img alt="image01" src="https://carp.cc.it-hiroshima.ac.jp/~tateyama/Lecture/AppEx/IrisData.jpg" /></p>
+<p><a class="reference external" href="https://carp.cc.it-hiroshima.ac.jp/~tateyama/Lecture/AppEx/LoadCSV.html">https://carp.cc.it-hiroshima.ac.jp/~tateyama/Lecture/AppEx/LoadCSV.html</a></p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">iris_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">iris_df</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># pandas で簡単に、主要な統計量を出力できる。</span>
+<span class="c1"># もちろん、それぞれ個別に出力することもできるがここでは省略。</span>
+<span class="n">iris_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>petal length (cm)</th>
+      <th>petal width (cm)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>150.000000</td>
+      <td>150.000000</td>
+      <td>150.000000</td>
+      <td>150.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>5.843333</td>
+      <td>3.057333</td>
+      <td>3.758000</td>
+      <td>1.199333</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.828066</td>
+      <td>0.435866</td>
+      <td>1.765298</td>
+      <td>0.762238</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>4.300000</td>
+      <td>2.000000</td>
+      <td>1.000000</td>
+      <td>0.100000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>5.100000</td>
+      <td>2.800000</td>
+      <td>1.600000</td>
+      <td>0.300000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>5.800000</td>
+      <td>3.000000</td>
+      <td>4.350000</td>
+      <td>1.300000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>6.400000</td>
+      <td>3.300000</td>
+      <td>5.100000</td>
+      <td>1.800000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>7.900000</td>
+      <td>4.400000</td>
+      <td>6.900000</td>
+      <td>2.500000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># データの確認</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">iris_df</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">diag_kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;spring&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/basic_statistic_values_11_0.png" src="../_images/basic_statistic_values_11_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="covariance">
+<h2>共分散 (Covariance)<a class="headerlink" href="#covariance" title="Permalink to this headline">¶</a></h2>
+<p>1つの標本が、2つ以上の特徴量を持つとき、特徴量1、 <span class="math notranslate nohighlight">\(x^{\left( 1\right) }\)</span> 、と特徴量2、 <span class="math notranslate nohighlight">\(x^{\left( 2\right) }\)</span> 、の間の共分散は、以下のように表す。</p>
+<div class="math notranslate nohighlight">
+\[ cov(x^{\left( 1\right) }, x^{\left( 2\right) }) = \frac{1}{N} \sum_{i = 1}^N (x^{\left( 1\right) }_{i} - \mu^{\left( 1\right) }) (x^{\left( 2\right) }_{i} - \mu^{\left( 2\right) }) \quad \]</div>
+<p>2つの特徴量の間に、正の相関がある場合は正の値、負の相関がある場合は負の値をとる。値の大きさが相関の強さを表す。
+ただし、これは、2つの特徴量の単位（尺度）が同じ場合のみである。</p>
+<p>共分散（行列）は、次回 (?) 紹介する、主成分解析（PCA analysis）で使う。</p>
+<p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E5%85%B1%E5%88%86%E6%95%A3">https://ja.wikipedia.org/wiki/共分散</a></p>
+</div>
+<div class="section" id="variance-covariance-matrixcovariance-matrix">
+<h2>分散共分散行列（共分散行列、Variance-covariance matrix、Covariance matrix）<a class="headerlink" href="#variance-covariance-matrixcovariance-matrix" title="Permalink to this headline">¶</a></h2>
+<p>次のような列ベクトルを考える。
+<span class="math notranslate nohighlight">\(X_1, X_2, ... , X_m\)</span> は、異なる m 個の特徴量を表す。</p>
+<p><span class="math notranslate nohighlight">\(\textbf{X}= \begin{bmatrix}X_1 \\ X_2 \\ \vdots \\ X_m \end{bmatrix}\)</span></p>
+<p>このベクトルの要素が各々分散が有限である確率変数であるとき、( ‘’i’’, ‘’j’’ ) の要素が次のような行列 Σ を分散共分散行列という。</p>
+<div class="math notranslate nohighlight">
+\[\Sigma_{ij} = \frac{1}{N} \sum_{i = 1}^m (X_{i} - \mu_{i}) (X_{j} - \mu_{j}) \quad\ \]</div>
+<p>N は標本の数である。
+つまり、対角成分は分散、それ以外は共分散となる行列を分散共分散行列という。</p>
+<p>特徴量のすべてのペアの共分散を見ることができる。</p>
+<p>以下に、iris データセットの各特徴量の分散共分散行列をヒートマップで示す。<br />
+対角成分が分散、それ以外の成分が共分散となっている。<br />
+例えば、petal length と sepal length に正の相関があることがわかる。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># 共分散行列を作成</span>
+<span class="n">cov_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cov_mat</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/basic_statistic_values_15_0.png" src="../_images/basic_statistic_values_15_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="id18">
+<h2>相関係数<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<p>共分散は、もとの値の大きさで数値が決まるので、単位が違う変数を複数比較するときなどに解釈が難しい。たとえば市町村単位で、その町ごとの人口と、ラーメン店の売上の共分散を計算しても、数字の意味がわかりにくい。</p>
+<p>そこで関係を見る場合には相関係数を使うことが一般的である。</p>
+<p>共分散の値を、各変数の標準偏差の積で割ったものが相関係数となる。相関係数は −1 から 1 までの値をとる。1 であれば 2 つの変数の値は完全に同期していることになる。</p>
+<div class="math notranslate nohighlight">
+\[\rho = \frac{\sigma_{X Y}}{\sigma_X\sigma_Y}\]</div>
+<p><span class="math notranslate nohighlight">\(\rho\)</span> は相関係数、X と Y は、それぞれ異なる特徴量を表す。</p>
+<p>相関係数は、共分散を標準化したものと言える（単位の影響を受けずにデータの関連性を示す）。</p>
+</div>
+<div class="section" id="normal-distributiongaussian-distrubution">
+<h2>正規分布（ガウス分布、Normal distribution、Gaussian distrubution）<a class="headerlink" href="#normal-distributiongaussian-distrubution" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[f(x)=\frac{1}{\sqrt{2\pi \sigma^2}} \exp \! \left( -\frac{(x-\mu)^2}{2\sigma^2} \right) \quad(x\in \mathbb{R} )\]</div>
+<ul class="simple">
+<li><p>ガウス分布は、最も一般的な確率密度関数（積分が確率となる関数）である。</p></li>
+<li><p>平均 <span class="math notranslate nohighlight">\(\mu\)</span> が分布の中心を表し、標準偏差 <span class="math notranslate nohighlight">\(\sigma\)</span> が分布の幅を表す。</p></li>
+<li><p>正規分布 N(μ, <span class="math notranslate nohighlight">\(\sigma^2\)</span>) からの無作為標本 x を取ると、平均 μ からのずれが ±1σ 以下の範囲に x が含まれる確率は 68.27%、±2σ 以下だと 95.45%、さらに ±3σ だと 99.73% となる。</p></li>
+<li><p>正規分布は、t分布やF分布といった種々の分布の考え方の基礎になっているだけでなく、実際の統計的推測においても、仮説検定、区間推定など、様々な場面で利用される。</p></li>
+</ul>
+<p>参考：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Statistics">https://en.wikipedia.org/wiki/Statistics</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Central_limit_theorem">https://en.wikipedia.org/wiki/Central_limit_theorem</a></p></li>
+<li><p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E6%AD%A3%E8%A6%8F%E5%88%86%E5%B8%83">https://ja.wikipedia.org/wiki/正規分布</a></p></li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h2>ガウス分布を人工的に作ってみる<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<p>ガウス分布に従ってランダムに生成したデータのヒストグラムと、ガウス分布を重ねて描いたものが以下。</p>
+<p>mu が平均値（分布の中心）
+sigma が標準偏差（分布の幅）</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># ガウス分布に従って乱数生成</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="c1"># mean and standard deviatin</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># ヒストグラムの作成</span>
+<span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">bins</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span>
+         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/basic_statistic_values_20_0.png" src="../_images/basic_statistic_values_20_0.png" />
+</div>
+</div>
+<p>mu と sigma の値を変えてみて、分布が変わることが確認できる。<br />
+また、確率密度関数であるため、横軸の全区間で積分をとると 1 となることが、縦軸の値からイメージできる。</p>
+<hr class="docutils" />
+<p>ちなみに、特徴量の尺度を揃えるために行われる標準化では、以下のような処理を行う。</p>
+<div class="math notranslate nohighlight">
+\[ x_{i_{std}} = \frac{x_i-\mu}{\sigma} \]</div>
+<p><span class="math notranslate nohighlight">\( x_{i_{std}} \)</span> : 特徴量 <span class="math notranslate nohighlight">\(x_i\)</span> が標準化されたもの<br />
+<span class="math notranslate nohighlight">\( \mu \)</span> : 平均値<br />
+<span class="math notranslate nohighlight">\( \sigma \)</span> : 標準偏差</p>
+<p>この処理は、平均値を 0、標準偏差が 1 になるように変換している。<br />
+つまり、それぞれの特徴量の分布を、正規分布と仮定して、中心が 0、分布の幅が同じスケールのガウス分布に従うように変換していると言える。</p>
+<p>この方法は、データを限られた範囲の値にスケーリングする min-max スケーリング（正規化と呼ばれることが多い）とは対照的に、外れ値から受ける影響が少なくなるため、より実用的であると言える。</p>
+<hr class="docutils" />
+<p>（正規化、標準化といった言葉は、分野によってはかなり曖昧に用いられることが多く、状況に応じてその意味を推測する必要がある。<br />
+また、 <span class="math notranslate nohighlight">\(x_i - \mu\)</span> という操作を mean normalization と呼び、 <span class="math notranslate nohighlight">\(1/\sigma \)</span> することを feature scaling と言ったりする。)</p>
+<hr class="docutils" />
+<p>上記は、人工的に作ったガウス分布なので、ヒストグラムと分布が似ているのは当たり前。</p>
+</div>
+<div class="section" id="id20">
+<h2>ガウス分布を iris データセットにあてはめてみる<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<p>今度は自然のデータにガウス関数がうまくフィットするかみたいので、iris データセットを使って確認してみる。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># iris dataset をガウス関数でfittingする</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">for</span> <span class="n">i_column</span> <span class="ow">in</span> <span class="n">iris_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">i_column</span> <span class="o">==</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span>
+    <span class="k">continue</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">i_column</span><span class="p">)</span>
+  <span class="n">mu</span> <span class="o">=</span> <span class="n">iris_df</span><span class="p">[</span><span class="n">i_column</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+  <span class="n">sigma</span> <span class="o">=</span> <span class="n">iris_df</span><span class="p">[</span><span class="n">i_column</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+  <span class="c1"># ヒストグラムの作成</span>
+  <span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">iris_df</span><span class="p">[</span><span class="n">i_column</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">bins</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span>
+          <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sepal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_23_1.png" src="../_images/basic_statistic_values_23_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sepal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_23_3.png" src="../_images/basic_statistic_values_23_3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_23_5.png" src="../_images/basic_statistic_values_23_5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_23_7.png" src="../_images/basic_statistic_values_23_7.png" />
+</div>
+</div>
+<p>Sepal width のみ、かろうじてガウス分布になっている気がするが、その他特徴量はガウス分布になっていないことがわかる。<br />
+以上の結果から、iris データセット全体を見ると、ガウス分布は、その分布を表すために適していないように見える。</p>
+<p>これは、データセットの中に複数のグループ（iris の種別）のデータが混在しているためであると考えられるため、それぞれのラベル（setosa、versicolor、virginica）ごとにガウス分布を描いてみる。</p>
+</div>
+<div class="section" id="id21">
+<h2>ラベル（iris の種別）ごとにガウス分布を描いてみる<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 種別ごとに分布を見てみる</span>
+
+<span class="k">for</span> <span class="n">i_name</span> <span class="ow">in</span> <span class="n">iris_df</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">i_name</span><span class="p">)</span>
+  <span class="n">df_tmp</span> <span class="o">=</span> <span class="n">iris_df</span><span class="p">[</span><span class="n">iris_df</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i_name</span><span class="p">]</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">df_tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">i_column</span> <span class="ow">in</span> <span class="n">df_tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i_column</span> <span class="o">==</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span>
+      <span class="k">continue</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i_column</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">df_tmp</span><span class="p">[</span><span class="n">i_column</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">df_tmp</span><span class="p">[</span><span class="n">i_column</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+    <span class="c1"># ヒストグラムの作成</span>
+    <span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df_tmp</span><span class="p">[</span><span class="n">i_column</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span>
+                  <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">bins</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>setosa
+(50, 5)
+sepal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_1.png" src="../_images/basic_statistic_values_25_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sepal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_3.png" src="../_images/basic_statistic_values_25_3.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_5.png" src="../_images/basic_statistic_values_25_5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_7.png" src="../_images/basic_statistic_values_25_7.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>versicolor
+(50, 5)
+sepal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_9.png" src="../_images/basic_statistic_values_25_9.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sepal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_11.png" src="../_images/basic_statistic_values_25_11.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_13.png" src="../_images/basic_statistic_values_25_13.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_15.png" src="../_images/basic_statistic_values_25_15.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>virginica
+(50, 5)
+sepal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_17.png" src="../_images/basic_statistic_values_25_17.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sepal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_19.png" src="../_images/basic_statistic_values_25_19.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal length (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_21.png" src="../_images/basic_statistic_values_25_21.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>petal width (cm)
+</pre></div>
+</div>
+<img alt="../_images/basic_statistic_values_25_23.png" src="../_images/basic_statistic_values_25_23.png" />
+</div>
+</div>
+<p>それぞれの種別ごとのデータ量が少ないため（50個）、ヒストグラムを作るときの bin （集計を取る区切り）の数を 10 個と粗くした。</p>
+<p>それぞれの種別ごとに見た場合、すべての特徴量の分布は、ガウス分布によっておおよそ表すことができていることがわかる。</p>
+<p>これら、それぞれの種別ごと、特徴量ごとのガウス分布は、平均値と標準偏差によって規定される。<br />
+こうして得られたガウス分布により、未知の特徴量のセットに対して、確率を得ることができるので分類器として使うことも可能である（異常検知を話すときに説明したい）。</p>
+</div>
+<div class="section" id="id22">
+<h2>参考<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E8%A6%81%E7%B4%84%E7%B5%B1%E8%A8%88%E9%87%8F">基本統計量 wikipedia</a></p></li>
+<li><p><a class="reference external" href="https://book.impress.co.jp/books/1117101099">［第2版］Python機械学習プログラミング 達人データサイエンティストによる理論と実践</a></p></li>
+<li><p><a class="reference external" href="https://www.coursera.org/learn/machine-learning">Andrew Ng先生の講義</a></p></li>
+</ul>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id11">1</a></span></dt>
+<dd><p>西岡康夫,数学チュートリアル やさしく語る 確率統計,オーム社, p.5,
+p.52013, ISBN 9784274214073</p>
+</dd>
+</dl>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "hnishi/jupyterbook-hnishi",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./data-analysis"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">データ分析</a>
+    <a class='right-next' id="next-link" href="pca.html" title="next page">主成分分析 （主成分解析、Principal component analysis : PCA）</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By hnishi<br/>
+        
+            &copy; Copyright 2021.<br/>
+          <div class="extra_footer">
+            Links --- <a href="https://hakasenote.hnishi.com/">Blog</a> - <a href="https://twitter.com/hnishi2509">Twitter</a> - <a href="https://github.com/hnishi">GitHub</a>
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

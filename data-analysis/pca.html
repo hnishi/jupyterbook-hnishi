@@ -7,66 +7,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>主成分分析 （主成分解析、Principal component analysis : PCA） &#8212; ハンズオン資料</title>
     
-  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
     
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     
       
   <link rel="stylesheet"
-    href="_static/vendor/open-sans_all/1.44.1/index.css">
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
   <link rel="stylesheet"
-    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/togglebutton.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe,.cell"
         const thebe_selector_input = "pre,.cell_input div.highlight"
         const thebe_selector_output = ".output,.cell_output"
     </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
-    <link rel="canonical" href="http://jupyterbook.hnishi.com/pca.html" />
-    <link rel="shortcut icon" href="_static/favicon.png"/>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="自然言語処理" href="language-models/intro.html" />
-    <link rel="prev" title="はじめに" href="intro.html" />
+    <link rel="canonical" href="http://jupyterbook.hnishi.com/data-analysis/pca.html" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="クラスタ分析" href="clustering.html" />
+    <link rel="prev" title="基本的な統計量とガウス分布" href="basic_statistic_values.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
 
 
 <!-- Opengraph tags -->
-<meta property="og:url"         content="http://jupyterbook.hnishi.com/pca.html" />
+<meta property="og:url"         content="http://jupyterbook.hnishi.com/data-analysis/pca.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="主成分分析 （主成分解析、Principal component analysis : PCA）" />
 <meta property="og:description" content="主成分分析 （主成分解析、Principal component analysis : PCA）  概要  主成分分析は、教師なし線形変換法の１つ  データセットの座標軸を、データの分散が最大になる方向に変換し、元の次元と同じもしくは、元の次元数より低い新しい特徴部分空間を作成する手法  主なタスク  次元削減  次元" />
@@ -85,47 +85,66 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="index.html">
+<a class="navbar-brand text-wrap" href="../index.html">
   
   
   <h1 class="site-logo" id="site-title">ハンズオン資料</h1>
   
 </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form>
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="intro.html">
+  <a class="reference internal" href="../intro.html">
    はじめに
   </a>
  </li>
 </ul>
 <ul class="current nav sidenav_l1">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   主成分分析 （主成分解析、Principal component analysis : PCA）
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="intro.html">
+   データ分析
   </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="basic_statistic_values.html">
+     基本的な統計量とガウス分布
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     主成分分析 （主成分解析、Principal component analysis : PCA）
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="clustering.html">
+     クラスタ分析
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
  </li>
  <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="language-models/intro.html">
+  <a class="reference internal" href="../language-models/intro.html">
    自然言語処理
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="language-models/easy_try_sentiment_analysis.html">
+    <a class="reference internal" href="../language-models/easy_try_sentiment_analysis.html">
      Python で日本語文章の感情分析を簡単に試す (with google colab)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="language-models/fine_tune_jp_bert_part01.html">
+    <a class="reference internal" href="../language-models/fine_tune_jp_bert_part01.html">
      huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="language-models/fine_tune_jp_bert_part02.html">
+    <a class="reference internal" href="../language-models/fine_tune_jp_bert_part02.html">
      huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
     </a>
    </li>
@@ -173,7 +192,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/pca.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/data-analysis/pca.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -193,10 +212,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/hnishi/jupyterbook-hnishi/issues/new?title=Issue%20on%20page%20%2Fpca.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/hnishi/jupyterbook-hnishi/issues/new?title=Issue%20on%20page%20%2Fdata-analysis/pca.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/hnishi/jupyterbook-hnishi/edit/main/jupyterbook_hnishi/pca.ipynb"><button
+        <a class="edit-button" href="https://github.com/hnishi/jupyterbook-hnishi/edit/main/jupyterbook_hnishi/data-analysis/pca.ipynb"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -216,17 +235,17 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/hnishi/jupyterbook-hnishi/main?urlpath=tree/jupyterbook_hnishi/pca.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/hnishi/jupyterbook-hnishi/main?urlpath=tree/jupyterbook_hnishi/data-analysis/pca.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
+                    src="../_static/images/logo_binder.svg"
                     alt="Interact on binder">Binder</button></a>
         
         
         
-        <a class="colab-button" href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/main/jupyterbook_hnishi/pca.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+        <a class="colab-button" href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/main/jupyterbook_hnishi/data-analysis/pca.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
                 title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
-                    src="_static/images/logo_colab.png"
+                    src="../_static/images/logo_colab.png"
                     alt="Interact on Colab">Colab</button></a>
         
         <button type="button" class="btn btn-secondary topbarbtn"
@@ -693,55 +712,55 @@ shape: (48, 14)
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Alcohol
 </pre></div>
 </div>
-<img alt="_images/pca_14_1.png" src="_images/pca_14_1.png" />
+<img alt="../_images/pca_14_1.png" src="../_images/pca_14_1.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Malic acid
 </pre></div>
 </div>
-<img alt="_images/pca_14_3.png" src="_images/pca_14_3.png" />
+<img alt="../_images/pca_14_3.png" src="../_images/pca_14_3.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Ash
 </pre></div>
 </div>
-<img alt="_images/pca_14_5.png" src="_images/pca_14_5.png" />
+<img alt="../_images/pca_14_5.png" src="../_images/pca_14_5.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Alcalinity of ash
 </pre></div>
 </div>
-<img alt="_images/pca_14_7.png" src="_images/pca_14_7.png" />
+<img alt="../_images/pca_14_7.png" src="../_images/pca_14_7.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Magnesium
 </pre></div>
 </div>
-<img alt="_images/pca_14_9.png" src="_images/pca_14_9.png" />
+<img alt="../_images/pca_14_9.png" src="../_images/pca_14_9.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Total phenols
 </pre></div>
 </div>
-<img alt="_images/pca_14_11.png" src="_images/pca_14_11.png" />
+<img alt="../_images/pca_14_11.png" src="../_images/pca_14_11.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Flavanoids
 </pre></div>
 </div>
-<img alt="_images/pca_14_13.png" src="_images/pca_14_13.png" />
+<img alt="../_images/pca_14_13.png" src="../_images/pca_14_13.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Nonflavanoid phenols
 </pre></div>
 </div>
-<img alt="_images/pca_14_15.png" src="_images/pca_14_15.png" />
+<img alt="../_images/pca_14_15.png" src="../_images/pca_14_15.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Proanthocyanins
 </pre></div>
 </div>
-<img alt="_images/pca_14_17.png" src="_images/pca_14_17.png" />
+<img alt="../_images/pca_14_17.png" src="../_images/pca_14_17.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Color intensity
 </pre></div>
 </div>
-<img alt="_images/pca_14_19.png" src="_images/pca_14_19.png" />
+<img alt="../_images/pca_14_19.png" src="../_images/pca_14_19.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Hue
 </pre></div>
 </div>
-<img alt="_images/pca_14_21.png" src="_images/pca_14_21.png" />
+<img alt="../_images/pca_14_21.png" src="../_images/pca_14_21.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: OD280/OD315 of diluted wines
 </pre></div>
 </div>
-<img alt="_images/pca_14_23.png" src="_images/pca_14_23.png" />
+<img alt="../_images/pca_14_23.png" src="../_images/pca_14_23.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>feature: Proline
 </pre></div>
 </div>
-<img alt="_images/pca_14_25.png" src="_images/pca_14_25.png" />
+<img alt="../_images/pca_14_25.png" src="../_images/pca_14_25.png" />
 </div>
 </div>
 <p>データを70％のトレーニングと30％のテストサブセットに分割する。</p>
@@ -824,7 +843,7 @@ standardize test [[ 0.89443737 -0.38811788  1.10073064 -0.81201711  1.13201117  
   import pandas.util.testing as tm
 </pre></div>
 </div>
-<img alt="_images/pca_21_1.png" src="_images/pca_21_1.png" />
+<img alt="../_images/pca_21_1.png" src="../_images/pca_21_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -905,7 +924,7 @@ Shape of eigen vectors
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_26_0.png" src="_images/pca_26_0.png" />
+<img alt="../_images/pca_26_0.png" src="../_images/pca_26_0.png" />
 </div>
 </div>
 <p>グラフから以下のことがわかる。</p>
@@ -981,7 +1000,7 @@ Shape of eigen vectors
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_33_0.png" src="_images/pca_33_0.png" />
+<img alt="../_images/pca_33_0.png" src="../_images/pca_33_0.png" />
 </div>
 </div>
 <p>主成分空間に変換後の各特徴量は、互いに相関が全くないことがわかる（互いに線形独立）。<br />
@@ -1104,7 +1123,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_44_0.png" src="_images/pca_44_0.png" />
+<img alt="../_images/pca_44_0.png" src="../_images/pca_44_0.png" />
 </div>
 </div>
 <p>PC1 軸方向をみると、PC2 軸方向よりもよりもデータが広く分布しており、データをよりよく区別できていることがわかる。</p>
@@ -1182,7 +1201,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_52_0.png" src="_images/pca_52_0.png" />
+<img alt="../_images/pca_52_0.png" src="../_images/pca_52_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1206,7 +1225,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_54_0.png" src="_images/pca_54_0.png" />
+<img alt="../_images/pca_54_0.png" src="../_images/pca_54_0.png" />
 </div>
 </div>
 <div class="section" id="id11">
@@ -1425,7 +1444,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce286d1a90&gt;
 </pre></div>
 </div>
-<img alt="_images/pca_66_2.png" src="_images/pca_66_2.png" />
+<img alt="../_images/pca_66_2.png" src="../_images/pca_66_2.png" />
 </div>
 </div>
 </div>
@@ -1449,7 +1468,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 &#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
 </pre></div>
 </div>
-<img alt="_images/pca_68_1.png" src="_images/pca_68_1.png" />
+<img alt="../_images/pca_68_1.png" src="../_images/pca_68_1.png" />
 </div>
 </div>
 </div>
@@ -1473,7 +1492,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce28309710&gt;
 </pre></div>
 </div>
-<img alt="_images/pca_70_2.png" src="_images/pca_70_2.png" />
+<img alt="../_images/pca_70_2.png" src="../_images/pca_70_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1494,7 +1513,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 &#39;c&#39; argument looks like a single numeric RGB or RGBA sequence, which should be avoided as value-mapping will have precedence in case its length matches with &#39;x&#39; &amp; &#39;y&#39;.  Please use a 2-D array with a single row if you really want to specify the same RGB or RGBA value for all points.
 </pre></div>
 </div>
-<img alt="_images/pca_71_1.png" src="_images/pca_71_1.png" />
+<img alt="../_images/pca_71_1.png" src="../_images/pca_71_1.png" />
 </div>
 </div>
 <p>次元削減せずに全てのの主成分を取得したい場合は、 <code class="docutils literal notranslate"><span class="pre">n_components=None</span></code> にする。</p>
@@ -1589,7 +1608,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce286b1a90&gt;
 </pre></div>
 </div>
-<img alt="_images/pca_79_2.png" src="_images/pca_79_2.png" />
+<img alt="../_images/pca_79_2.png" src="../_images/pca_79_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1612,7 +1631,7 @@ $<span class="math notranslate nohighlight">\(\Sigma \cdot (-v) = -\Sigma v = -\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/pca_80_0.png" src="_images/pca_80_0.png" />
+<img alt="../_images/pca_80_0.png" src="../_images/pca_80_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1736,8 +1755,8 @@ accuracy 1.0
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce2a4a11d0&gt;
 </pre></div>
 </div>
-<img alt="_images/pca_86_2.png" src="_images/pca_86_2.png" />
-<img alt="_images/pca_86_3.png" src="_images/pca_86_3.png" />
+<img alt="../_images/pca_86_2.png" src="../_images/pca_86_2.png" />
+<img alt="../_images/pca_86_3.png" src="../_images/pca_86_3.png" />
 </div>
 </div>
 <p>元々の全ての特徴量を使って学習させた方が精度が高くなった。<br />
@@ -1798,8 +1817,8 @@ accuracy 0.7777777777777778
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fce25ebe470&gt;
 </pre></div>
 </div>
-<img alt="_images/pca_91_2.png" src="_images/pca_91_2.png" />
-<img alt="_images/pca_91_3.png" src="_images/pca_91_3.png" />
+<img alt="../_images/pca_91_2.png" src="../_images/pca_91_2.png" />
+<img alt="../_images/pca_91_3.png" src="../_images/pca_91_3.png" />
 </div>
 </div>
 <p>もともとの特徴量を 2 つだけ使った場合、精度はかなり下がる。
@@ -1854,7 +1873,7 @@ accuracy 0.7777777777777778
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./."
+            path: "./data-analysis"
         },
         predefinedOutput: true
     }
@@ -1866,8 +1885,8 @@ accuracy 0.7777777777777778
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">はじめに</a>
-    <a class='right-next' id="next-link" href="language-models/intro.html" title="next page">自然言語処理</a>
+    <a class='left-prev' id="prev-link" href="basic_statistic_values.html" title="previous page">基本的な統計量とガウス分布</a>
+    <a class='right-next' id="next-link" href="clustering.html" title="next page">クラスタ分析</a>
 
         </div>
         
@@ -1893,7 +1912,7 @@ accuracy 0.7777777777777778
     </div>
 
     
-  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
 
 
     
