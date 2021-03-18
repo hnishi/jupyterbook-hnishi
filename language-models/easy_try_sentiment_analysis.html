@@ -314,7 +314,7 @@
         
               <div>
                 
-  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/easy_try_sentiment_analysis.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/jupyterbook_hnishi/language-models/easy_try_sentiment_analysis.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
 <div class="section" id="python-with-google-colab">
 <h1>Python で日本語文章の感情分析を簡単に試す (with google colab)<a class="headerlink" href="#python-with-google-colab" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
@@ -640,17 +640,23 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 2.1MB 8.7MB/s 
+     |████████████████████████████████| 3.2MB 41.5MB/s 
+     |████████████████████████████████| 890kB 52.9MB/s 
+?25h  Building wheel for sacremoses (setup.py) ... ?25l?25hdone
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span> capt
 
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">pipeline</span>
 
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">BertForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -659,30 +665,30 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># シンプルな動作確認</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">,</span><span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)(</span><span class="s2">&quot;私は幸福である。&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)(</span><span class="s2">&quot;私は幸福である。&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9843042492866516}]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9934489130973816}]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">,</span><span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;daigo/bert-base-japanese-sentiment&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
 
 <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">sentiment_analyzer</span><span class="p">,</span> <span class="n">list_text</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.6794141530990601}],
- [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.972648024559021}],
- [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.8007588386535645}],
- [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.7873095870018005}],
- [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9143434166908264}]]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9596116542816162}],
+ [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.6044701933860779}],
+ [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.8851077556610107}],
+ [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.6943467855453491}],
+ [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.5758240222930908}]]
 </pre></div>
 </div>
 </div>
@@ -696,8 +702,8 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[{&#39;label&#39;: &#39;ネガティブ&#39;, &#39;score&#39;: 0.9896144866943359}],
- [{&#39;label&#39;: &#39;ネガティブ&#39;, &#39;score&#39;: 0.8293251991271973}],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[{&#39;label&#39;: &#39;ネガティブ&#39;, &#39;score&#39;: 0.9891454577445984}],
+ [{&#39;label&#39;: &#39;ネガティブ&#39;, &#39;score&#39;: 0.8046908974647522}],
  [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9862995147705078}],
  [{&#39;label&#39;: &#39;ポジティブ&#39;, &#39;score&#39;: 0.9928306937217712}]]
 </pre></div>

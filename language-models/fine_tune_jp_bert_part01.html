@@ -265,22 +265,22 @@
      Pre-trained Model を使って推論
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#fine-tuning">
-     テキスト分類のための Fine Tuning の手順
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     モデルのダウンロード (キャッシュがない場合) と読み込み
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#fine-tune">
-     Fine Tune したモデルで推論
-    </a>
-   </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fine-tuning">
+   テキスト分類のための Fine Tuning の手順
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   学習
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fine-tune">
+   Fine Tune したモデルで推論
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id4">
@@ -299,15 +299,13 @@
         
               <div>
                 
-  <p><a href="https://colab.research.google.com/github/hnishi/handson-language-models/blob/main/fine_tune_jp_bert_part01.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/jupyterbook_hnishi/language-models/fine_tune_jp_bert_part01.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
 <div class="section" id="huggingface-transformers-bert-with-google-colab-part01">
 <h1>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01<a class="headerlink" href="#huggingface-transformers-bert-with-google-colab-part01" title="Permalink to this headline">¶</a></h1>
 <p>本記事では、日本語 BERT モデルをファインチューニングして感情分析する方法を解説します。</p>
 <p>BERT の詳細な解説は、この記事のスコープ外とします。</p>
 <p>この記事は、part01 です。</p>
-<p><a class="reference external" href="https://github.com/hnishi/handson-language-models/blob/main/fine_tune_jp_bert_part02.ipynb">part02</a> では、まとまったデータセットを使って実際に学習と評価を行っています。</p>
-<p>すべての記事の目次は以下をご参照ください。</p>
-<p><a class="reference external" href="https://github.com/hnishi/handson-language-models/blob/main/README.md">https://github.com/hnishi/handson-language-models/blob/main/README.md</a></p>
+<p><a class="reference external" href="https://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part02.html">part02</a> では、まとまったデータセットを使って実際に学習と評価を行っています。</p>
 <div class="section" id="id1">
 <h2>参考<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -325,9 +323,9 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 1.9MB 5.4MB/s 
-     |████████████████████████████████| 890kB 23.9MB/s 
-     |████████████████████████████████| 3.2MB 25.4MB/s 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 2.1MB 5.5MB/s 
+     |████████████████████████████████| 890kB 39.9MB/s 
+     |████████████████████████████████| 3.2MB 36.4MB/s 
 ?25h  Building wheel for sacremoses (setup.py) ... ?25l?25hdone
 </pre></div>
 </div>
@@ -379,29 +377,21 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
 
-<span class="n">unmasker</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;fill-mask&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+<span class="n">unmasker</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;fill-mask&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
 <span class="n">unmasker</span><span class="p">(</span><span class="s2">&quot;こんにちは、私は[MASK]モデルです。&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "6c628f4853784e4484a0ab9ce9076855", "version_major": 2, "version_minor": 0}
+{"model_id": "690598622b384c56a60d654aa570015e", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "8aee8bd82ef7455d9808883dbeaf4440", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "d407e117316444a885df0d61d7770e5e", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "4c3c4f83dedc4cecb30538dbd5a7f65e", "version_major": 2, "version_minor": 0}
+{"model_id": "9357c15b4abe4737bec49359a2d85d16", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
@@ -421,7 +411,7 @@
  {&#39;score&#39;: 0.03621169179677963,
   &#39;sequence&#39;: &#39;こんにちは 、 私 は こう モデルです 。&#39;,
   &#39;token&#39;: 11668,
-  &#39;token_str&#39;: &#39;こう&#39;},
+  &#39;token_str&#39;: &#39;こ う&#39;},
  {&#39;score&#39;: 0.028521882370114326,
   &#39;sequence&#39;: &#39;こんにちは 、 私 は 、 モデルです 。&#39;,
   &#39;token&#39;: 828,
@@ -429,7 +419,7 @@
  {&#39;score&#39;: 0.02647402137517929,
   &#39;sequence&#39;: &#39;こんにちは 、 私 は いら モデルです 。&#39;,
   &#39;token&#39;: 24523,
-  &#39;token_str&#39;: &#39;いら&#39;}]
+  &#39;token_str&#39;: &#39;い ら&#39;}]
 </pre></div>
 </div>
 </div>
@@ -445,22 +435,27 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "826c4e22e5074f288f4c3d5ed4ba2bb9", "version_major": 2, "version_minor": 0}
+{"model_id": "f13a02167d764b988eda9136b562399b", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "fca1cbf93f65400193452846c0277cbd", "version_major": 2, "version_minor": 0}
+{"model_id": "bb6fcd3967a94ea3a6fed7eff08fe23c", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "11db93e5146043d095ae232b12ef2f83", "version_major": 2, "version_minor": 0}
+{"model_id": "45ddb483066b4f7784fc40e60f94154f", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "63286622467141efb700dd5947ee7ffa", "version_major": 2, "version_minor": 0}
+{"model_id": "61f1c2763b8b4240a50ad06d26a4bafa", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "8ee9e9ede2944ee7bffed5bfb196dd05", "version_major": 2, "version_minor": 0}
 </script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
@@ -494,8 +489,9 @@
 </div>
 </div>
 </div>
+</div>
 <div class="section" id="fine-tuning">
-<h3>テキスト分類のための Fine Tuning の手順<a class="headerlink" href="#fine-tuning" title="Permalink to this headline">¶</a></h3>
+<h2>テキスト分類のための Fine Tuning の手順<a class="headerlink" href="#fine-tuning" title="Permalink to this headline">¶</a></h2>
 <p>以下、簡易的に 3 種類のラベル (positive: 2, neutral: 1, negative: 0) のデータを使って fine tuning を行います。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -560,7 +556,7 @@
 </div>
 </div>
 <div class="section" id="id3">
-<h3>モデルのダウンロード (キャッシュがない場合) と読み込み<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<h2>学習<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>同時にダウンロードされるトークナイザーを利用して、データセットの text の encoding を行います。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -570,15 +566,6 @@
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">BertForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForSequenceClassification: [&#39;cls.predictions.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.decoder.weight&#39;, &#39;cls.predictions.decoder.bias&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.seq_relationship.bias&#39;]
-- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
-- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
-Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-large-japanese and are newly initialized: [&#39;classifier.weight&#39;, &#39;classifier.bias&#39;]
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
 </div>
@@ -610,11 +597,11 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="section" id="fine-tune">
-<h3>Fine Tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h3>
+<h2>Fine Tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h2>
 <p>学習に使ったデータを入力して推論してみます。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -626,7 +613,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.3931503891944885}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.4746145009994507}]
 </pre></div>
 </div>
 </div>
@@ -638,20 +625,19 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>私はこの映画をみることができて、とても嬉しい。: [{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.3935401141643524}]
-今日の晩御飯は何だろう。: [{&#39;label&#39;: &#39;LABEL_1&#39;, &#39;score&#39;: 0.5711930990219116}]
-猫に足を噛まれて痛い。: [{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.5832840204238892}]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>私はこの映画をみることができて、とても嬉しい。: [{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.49736475944519043}]
+今日の晩御飯は何だろう。: [{&#39;label&#39;: &#39;LABEL_1&#39;, &#39;score&#39;: 0.3745356500148773}]
+猫に足を噛まれて痛い。: [{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.5765560269355774}]
 </pre></div>
 </div>
 </div>
 </div>
 <p>スコアは低いですが、学習に使ったデータセットに関して、正しいラベルが予測できていることを確認できました。</p>
 </div>
-</div>
 <div class="section" id="id4">
 <h2>まとめ<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <p>簡単な文章とラベルを用意して fine tuning する方法を記載しました。</p>
-<p><a class="reference external" href="https://github.com/hnishi/handson-language-models/blob/main/fine_tune_jp_bert_part02.ipynb">次の記事</a> では、より大きなデータセットを使って、より時間のかかる学習を試してみたいと思います。</p>
+<p><a class="reference external" href="https://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part02.html">次の記事</a> では、より大きなデータセットを使って、より時間のかかる学習を試してみたいと思います。</p>
 </div>
 </div>
 
