@@ -75,7 +75,7 @@ Traceback (most recent call last):
 KeyError: 'state'
 ```
 
-As far as I know, to clear widget states, open the notebook in your local jupyter notebook and choose the widget tab and click clear widget state and save the ipynb file.
+As far as I know, to clear widget states, open the notebook in your local jupyter notebook and choose the widget tab and click "clear widget state" and save the ipynb file.
 
 When you push the updated codes into the main branch, GitHub Actions builds the html pages and update your site.
 
