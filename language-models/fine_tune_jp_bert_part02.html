@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>参考 &#8212; ハンズオン資料</title>
+    <title>Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02 &#8212; ハンズオン資料</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -65,8 +65,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="http://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part02.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="参考" />
-<meta property="og:description" content="参考  huggingface transformers ドキュメント  BERT 論文  Fine-tuning a BERT model with transformers必要なライブラリのインストール  !pip install -q transformers fugashi[unidic-lite]  [2K" />
+<meta property="og:title"       content="Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02" />
+<meta property="og:description" content="Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02  Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google" />
 
 
 <meta name="twitter:card" content="summary" />
@@ -142,47 +142,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     参考
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id2">
-     必要なライブラリのインストール
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id3">
-     学習データの準備
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#references">
-     References
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id7">
-     学習
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id8">
-     評価
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#fine-tune">
-     fine tune したモデルで推論
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id9">
-     学習済みモデルを保存
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="#id10">
-     まとめ
+     Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
     </a>
    </li>
   </ul>
@@ -303,64 +263,64 @@
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
    参考
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
    必要なライブラリのインストール
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id3">
    学習データの準備
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#references">
    References
   </a>
   <ul class="nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id4">
      データの確認
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id5">
      ラベルごとのデータ件数の確認
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id6">
      カスタムデータセットに変換
     </a>
    </li>
   </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id7">
    学習
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id8">
    評価
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fine-tune">
    fine tune したモデルで推論
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id9">
    学習済みモデルを保存
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id10">
    まとめ
   </a>
@@ -377,13 +337,15 @@
         
               <div>
                 
-  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/update_bert_fine_tuning/jupyterbook_hnishi/language-models/fine_tune_jp_bert_part02.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/fix_notebook/jupyterbook_hnishi/language-models/fine_tune_jp_bert_part02.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<div class="section" id="hugging-face-transformers-bert-with-google-colab-part02">
+<h1>Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02<a class="headerlink" href="#hugging-face-transformers-bert-with-google-colab-part02" title="Permalink to this headline">¶</a></h1>
 <p>Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02</p>
 <p>part01 に引き続いて、より大きなデータセットを使い、<a class="reference external" href="https://huggingface.co/docs/transformers/v4.27.2/en/main_classes/trainer#transformers.Trainer">Trainer class</a> を使いファインチューニングする方法を記載します。</p>
 <p>また、学習後の評価方法に関しても記載します。</p>
 <p>なお、今回は 5000 件のデータを使って学習を行いますので、GPU の使用を推奨します (著者は google colab を使用して動作確認しています)。</p>
 <div class="section" id="id1">
-<h1>参考<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<h2>参考<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://huggingface.co/transformers/">huggingface transformers ドキュメント</a></p></li>
 <li><p><a class="reference external" href="https://arxiv.org/abs/1810.04805">BERT 論文</a></p></li>
@@ -391,7 +353,7 @@
 </ul>
 </div>
 <div class="section" id="id2">
-<h1>必要なライブラリのインストール<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
+<h2>必要なライブラリのインストール<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q transformers fugashi<span class="o">[</span>unidic-lite<span class="o">]</span>
@@ -420,7 +382,7 @@
 </div>
 </div>
 <div class="section" id="id3">
-<h1>学習データの準備<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h1>
+<h2>学習データの準備<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>株式会社リクルート 様が公開している <a class="reference external" href="https://github.com/megagonlabs/jrte-corpus">Japanese Realistic Textual Entailment Corpus (含意関係データセット) </a> を使用します。</p>
 <p>下記、制限があるため注意しましょう。</p>
 <blockquote>
@@ -428,7 +390,7 @@
 </div></blockquote>
 </div>
 <div class="section" id="references">
-<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p>林部祐太．
 知識の整理のための根拠付き自然文間含意関係コーパスの構築．
@@ -469,7 +431,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="section" id="id4">
-<h2>データの確認<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<h3>データの確認<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -628,7 +590,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="section" id="id5">
-<h2>ラベルごとのデータ件数の確認<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<h3>ラベルごとのデータ件数の確認<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>全体的に、positive なラベルが多いようです。</p>
 <p>したがって、学習の結果 positive に極端に判定されやすいモデルとなってしまう可能性があるため注意が必要です。</p>
 <p>評価指標に accuracy ではなく、F1 score などの不均衡データに関しても正しく評価できるものを選択する必要があります。</p>
@@ -647,7 +609,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="section" id="id6">
-<h2>カスタムデータセットに変換<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<h3>カスタムデータセットに変換<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>後述する huggingface transformers の Trainer クラスで学習を行うために、カスタムデータセットとして準備します。</p>
 <p>usage が train と dev のサンプルを学習用、test のサンプルをテスト用として分割します。</p>
 <div class="cell docutils container">
@@ -683,7 +645,7 @@ Proceedings of The 12th Language Resources and Evaluation Conference, pp.6829-68
 </div>
 </div>
 <div class="section" id="id7">
-<h1>学習<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h1>
+<h2>学習<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># GPU が利用できる場合は GPU を利用する</span>
@@ -954,7 +916,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="section" id="id8">
-<h1>評価<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h1>
+<h2>評価<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <p>上記のテストデータの評価結果を見ると、accuracy が 0.75 F1 score が 0.72 で結構良いのではないでしょうか。</p>
 <p>さらに epoch 数を増やすことで性能の向上が見込めそうです。</p>
 <p>ちなみに、以下のように parameter を freeze させて fine tuning を行った場合は、accuracy が 0.60、F1 値が 0.46 と、かなり低くなってしまいました。</p>
@@ -988,7 +950,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="section" id="fine-tune">
-<h1>fine tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h1>
+<h2>fine tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
@@ -1025,7 +987,7 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 <p>いい感じに予測できていそうです。</p>
 </div>
 <div class="section" id="id9">
-<h1>学習済みモデルを保存<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h1>
+<h2>学習済みモデルを保存<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
 <p>以下では、colab から google drive に保存する場合の例を示します。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1052,8 +1014,9 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 </div>
 </div>
 <div class="section" id="id10">
-<h1>まとめ<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h1>
+<h2>まとめ<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
 <p>日本語 BERT large の pre-trained model を fine tuning する方法をご紹介しました。</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
