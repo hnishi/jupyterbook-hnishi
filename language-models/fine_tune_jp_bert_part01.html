@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01 &#8212; ハンズオン資料</title>
+    <title>Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01 &#8212; ハンズオン資料</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -56,7 +56,7 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02" href="fine_tune_jp_bert_part02.html" />
+    <link rel="next" title="参考" href="fine_tune_jp_bert_part02.html" />
     <link rel="prev" title="Python で日本語文章の感情分析を簡単に試す (with google colab)" href="easy_try_sentiment_analysis.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -66,8 +66,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="http://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part01.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01" />
-<meta property="og:description" content="huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01  本記事では、日本語 BERT モデルをファインチューニングして感情分析する方法を解説します。  BERT の詳細な解説は、この記事のスコープ外とし" />
+<meta property="og:title"       content="Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01" />
+<meta property="og:description" content="Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01  本記事では、日本語 BERT モデルをファインチューニングして感情分析する方法を解説します。  BERT の詳細な解説は、この記事のスコープ外と" />
 
 
 <meta name="twitter:card" content="summary" />
@@ -138,12 +138,52 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
+     Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="fine_tune_jp_bert_part02.html">
-     huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02
+     参考
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id2">
+     必要なライブラリのインストール
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id3">
+     学習データの準備
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#references">
+     References
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id7">
+     学習
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id8">
+     評価
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#fine-tune">
+     fine tune したモデルで推論
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id9">
+     学習済みモデルを保存
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fine_tune_jp_bert_part02.html#id10">
+     まとめ
     </a>
    </li>
   </ul>
@@ -266,11 +306,16 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id1">
-   参考
+   補足
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id2">
+   参考
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
    必要なライブラリのインストール
   </a>
  </li>
@@ -288,11 +333,16 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fine-tuning">
+   Fine Tuning 前の感情分析
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
    テキスト分類のための Fine Tuning の手順
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id3">
+  <a class="reference internal nav-link" href="#id5">
    学習
   </a>
  </li>
@@ -302,7 +352,7 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id4">
+  <a class="reference internal nav-link" href="#id6">
    まとめ
   </a>
  </li>
@@ -318,34 +368,34 @@
         
               <div>
                 
-  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/colab-dev/jupyterbook_hnishi/language-models/fine_tune_jp_bert_part01.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
-<div class="section" id="huggingface-transformers-bert-with-google-colab-part01">
-<h1>huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01<a class="headerlink" href="#huggingface-transformers-bert-with-google-colab-part01" title="Permalink to this headline">¶</a></h1>
+  <p><a href="https://colab.research.google.com/github/hnishi/jupyterbook-hnishi/blob/update_bert_fine_tuning/jupyterbook_hnishi/language-models/fine_tune_jp_bert_part01.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<div class="section" id="hugging-face-transformers-bert-with-google-colab-part01">
+<h1>Hugging Face transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part01<a class="headerlink" href="#hugging-face-transformers-bert-with-google-colab-part01" title="Permalink to this headline">¶</a></h1>
 <p>本記事では、日本語 BERT モデルをファインチューニングして感情分析する方法を解説します。</p>
 <p>BERT の詳細な解説は、この記事のスコープ外とします。</p>
 <p>この記事は、part01 です。</p>
 <p><a class="reference external" href="https://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part02.html">part02</a> では、まとまったデータセットを使って実際に学習と評価を行っています。</p>
 <div class="section" id="id1">
-<h2>参考<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>補足<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>Hugging Face とは</strong></p>
+<p>Hugging Faceは、学習済みモデルやデータセットなどを公開するリポジトリサイトであると同時に、これらを手軽に利用するためのインタフェースともいえるようなライブラリを公開しています。</p>
+<p><strong>BERT</strong></p>
+<p><a class="reference external" href="https://arxiv.org/abs/1810.04805">BERT</a> とは、Bidirectional Encoder Representations from Transformersの略称で、Googleが開発した自然言語処理のモデルです。</p>
+<p>ラベルのないテキストから文章の中の単語やフレーズの意味や関係性を事前学習し、出力層を1つ追加してファインチューニングを行うことで、幅広いタスクに対して性能の良いモデルを作成できます。</p>
+</div>
+<div class="section" id="id2">
+<h2>参考<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://huggingface.co/transformers/">huggingface transformers ドキュメント</a></p></li>
 <li><p><a class="reference external" href="https://arxiv.org/abs/1810.04805">BERT 論文</a></p></li>
 <li><p><a class="reference external" href="https://towardsdatascience.com/fine-tuning-a-bert-model-with-transformers-c8e49c4e008b">Fine-tuning a BERT model with transformers</a></p></li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>必要なライブラリのインストール<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>必要なライブラリのインストール<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q transformers
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 2.1MB 5.5MB/s 
-     |████████████████████████████████| 890kB 39.9MB/s 
-     |████████████████████████████████| 3.2MB 36.4MB/s 
-?25h  Building wheel for sacremoses (setup.py) ... ?25l?25hdone
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q transformers fugashi<span class="o">[</span>unidic-lite<span class="o">]</span>
 </pre></div>
 </div>
 </div>
@@ -354,8 +404,8 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">pipeline</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="kn">import</span> <span class="n">AdamW</span>
 </pre></div>
 </div>
 </div>
@@ -363,82 +413,59 @@
 </div>
 <div class="section" id="bert">
 <h2>日本語 BERT の簡単なチュートリアル<a class="headerlink" href="#bert" title="Permalink to this headline">¶</a></h2>
-<p>最初に、huggingface transformers を使った日本語 BERT pre-trained model の使い方や fine tuning の方法を、簡単に見ていくことにします。</p>
-<p>今回試す事前学習済みモデルとしては、 bert-large-japanese　を利用してみたいと思います。</p>
-<hr class="docutils" />
-<p><strong>補足</strong></p>
-<p>最近 (2021-03-05)、東北大学のグループから BERT の日本語 pre-trained models の <a class="reference external" href="https://github.com/cl-tohoku/bert-japanese/releases/tag/v2.0">version 2</a> が公開されています。</p>
-<p>このリリースでは、より大きなアーキテクチャの bert-large-japanese モデルも公開されています。</p>
-<ul class="simple">
-<li><p>cl-tohoku/bert-base-japanese-v2</p></li>
-<li><p>cl-tohoku/bert-large-japanese</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BERT</span><span class="o">-</span><span class="n">base</span> <span class="n">models</span> <span class="n">consist</span> <span class="n">of</span> <span class="mi">12</span> <span class="n">layers</span><span class="p">,</span> <span class="mi">768</span> <span class="n">dimensions</span> <span class="n">of</span> <span class="n">hidden</span> <span class="n">states</span><span class="p">,</span> <span class="ow">and</span> <span class="mi">12</span> <span class="n">attention</span> <span class="n">heads</span><span class="o">.</span>
-<span class="n">BERT</span><span class="o">-</span><span class="n">large</span> <span class="n">models</span> <span class="n">consist</span> <span class="n">of</span> <span class="mi">24</span> <span class="n">layers</span><span class="p">,</span> <span class="mi">1024</span> <span class="n">dimensions</span> <span class="n">of</span> <span class="n">hidden</span> <span class="n">states</span><span class="p">,</span> <span class="ow">and</span> <span class="mi">16</span> <span class="n">attention</span> <span class="n">heads</span><span class="o">.</span>
-</pre></div>
-</div>
+<p>最初に、huggingface transformers を使った日本語 BERT pre-trained model の使い方や fine tuning の方法を、見ていきます。</p>
+<p>今回試す事前学習済みモデルとして、東北大学のグループによって公開されているものを利用します。</p>
+<p><strong>参考</strong></p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://huggingface.co/cl-tohoku">https://huggingface.co/cl-tohoku</a></p></li>
 <li><p><a class="reference external" href="https://github.com/cl-tohoku/bert-japanese">https://github.com/cl-tohoku/bert-japanese</a></p></li>
 </ul>
 <div class="section" id="pre-trained-model">
 <h3>Pre-trained Model を使って推論<a class="headerlink" href="#pre-trained-model" title="Permalink to this headline">¶</a></h3>
-<p>BERT なので、mask された token を予測するように学習されています。</p>
-<p>したがって、pre-trained model を使って、文章中の穴埋め (文章中の欠損箇所の予測) を行うことができます。</p>
-<p>以下の２種類のモデルを使って推論してみました。</p>
+<p>BERT モデルは、mask された token (<code class="docutils literal notranslate"><span class="pre">[MASK]</span></code>) を予測するように学習されています。</p>
+<p>したがって、pre-trained model を使って、文章中の穴埋め (文章中の欠損箇所の予測) を
+行えます。</p>
+<p>以下の２種類のモデルを使って推論を試して、結果を比較してみましょう。</p>
 <ul class="simple">
-<li><p>cl-tohoku/bert-large-japanese</p></li>
-<li><p>bert-base-multilingual-uncased (BERT の多言語モデル)</p></li>
+<li><p><a class="reference external" href="https://huggingface.co/cl-tohoku/bert-large-japanese">cl-tohoku/bert-large-japanese</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/bert-base-multilingual-uncased">bert-base-multilingual-uncased</a> (BERT の多言語モデル)</p></li>
 </ul>
-<p>結果、 <code class="docutils literal notranslate"><span class="pre">bert-base-multilingual-uncased</span></code> のほうが自然な文章となりました。</p>
-<p>この違いは、学習に使用されたデータセットに依存しているのかと思いましたが、どちらのモデルも wikipedia をデータセットとして利用しているので、謎です。</p>
+<p><a class="reference external" href="https://huggingface.co/docs/transformers/main_classes/pipelines">pipeline</a> に <code class="docutils literal notranslate"><span class="pre">fill-mask</span></code> タスクを指定することで、簡単に試すことができます。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
 
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
-
-<span class="n">unmasker</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;fill-mask&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
-<span class="n">unmasker</span><span class="p">(</span><span class="s2">&quot;こんにちは、私は[MASK]モデルです。&quot;</span><span class="p">)</span>
+<span class="n">unmasker</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;fill-mask&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">unmasker</span><span class="p">(</span><span class="s2">&quot;今日の昼食は[MASK]でした。&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "690598622b384c56a60d654aa570015e", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "9357c15b4abe4737bec49359a2d85d16", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForMaskedLM: [&#39;cls.seq_relationship.weight&#39;, &#39;cls.seq_relationship.bias&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForMaskedLM: [&#39;cls.seq_relationship.bias&#39;, &#39;cls.seq_relationship.weight&#39;]
 - This IS expected if you are initializing BertForMaskedLM from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertForMaskedLM from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;score&#39;: 0.13797800242900848,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は お モデルです 。&#39;,
-  &#39;token&#39;: 860,
-  &#39;token_str&#39;: &#39;お&#39;},
- {&#39;score&#39;: 0.09143581241369247,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は う モデルです 。&#39;,
-  &#39;token&#39;: 856,
-  &#39;token_str&#39;: &#39;う&#39;},
- {&#39;score&#39;: 0.03621169179677963,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は こう モデルです 。&#39;,
-  &#39;token&#39;: 11668,
-  &#39;token_str&#39;: &#39;こ う&#39;},
- {&#39;score&#39;: 0.028521882370114326,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 、 モデルです 。&#39;,
-  &#39;token&#39;: 828,
-  &#39;token_str&#39;: &#39;、&#39;},
- {&#39;score&#39;: 0.02647402137517929,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は いら モデルです 。&#39;,
-  &#39;token&#39;: 24523,
-  &#39;token_str&#39;: &#39;い ら&#39;}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;score&#39;: 0.04221104457974434,
+  &#39;token&#39;: 32474,
+  &#39;token_str&#39;: &#39;サラダ&#39;,
+  &#39;sequence&#39;: &#39;今日 の 昼食 は サラダ でし た 。&#39;},
+ {&#39;score&#39;: 0.036806173622608185,
+  &#39;token&#39;: 18526,
+  &#39;token_str&#39;: &#39;カレー&#39;,
+  &#39;sequence&#39;: &#39;今日 の 昼食 は カレー でし た 。&#39;},
+ {&#39;score&#39;: 0.0313434936106205,
+  &#39;token&#39;: 31893,
+  &#39;token_str&#39;: &#39;ご飯&#39;,
+  &#39;sequence&#39;: &#39;今日 の 昼食 は ご飯 でし た 。&#39;},
+ {&#39;score&#39;: 0.021632177755236626,
+  &#39;token&#39;: 17540,
+  &#39;token_str&#39;: &#39;元気&#39;,
+  &#39;sequence&#39;: &#39;今日 の 昼食 は 元気 でし た 。&#39;},
+ {&#39;score&#39;: 0.020115602761507034,
+  &#39;token&#39;: 23869,
+  &#39;token_str&#39;: &#39;うどん&#39;,
+  &#39;sequence&#39;: &#39;今日 の 昼食 は うどん でし た 。&#39;}]
 </pre></div>
 </div>
 </div>
@@ -448,82 +475,73 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;bert-base-multilingual-uncased&quot;</span>
 
 <span class="n">unmasker</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;fill-mask&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
-<span class="n">unmasker</span><span class="p">(</span><span class="s2">&quot;こんにちは、私は[MASK]モデルです。&quot;</span><span class="p">)</span>
+<span class="n">unmasker</span><span class="p">(</span><span class="s2">&quot;今日の昼食は[MASK]でした。&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "f13a02167d764b988eda9136b562399b", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "bb6fcd3967a94ea3a6fed7eff08fe23c", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "45ddb483066b4f7784fc40e60f94154f", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "61f1c2763b8b4240a50ad06d26a4bafa", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "8ee9e9ede2944ee7bffed5bfb196dd05", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-multilingual-uncased were not used when initializing BertForMaskedLM: [&#39;cls.seq_relationship.weight&#39;, &#39;cls.seq_relationship.bias&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-multilingual-uncased were not used when initializing BertForMaskedLM: [&#39;cls.seq_relationship.bias&#39;, &#39;cls.seq_relationship.weight&#39;]
 - This IS expected if you are initializing BertForMaskedLM from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertForMaskedLM from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;score&#39;: 0.21041248738765717,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 、 モテルてす 。&#39;,
-  &#39;token&#39;: 1482,
-  &#39;token_str&#39;: &#39;、&#39;},
- {&#39;score&#39;: 0.12128563225269318,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 元 モテルてす 。&#39;,
-  &#39;token&#39;: 2051,
-  &#39;token_str&#39;: &#39;元&#39;},
- {&#39;score&#39;: 0.033908627927303314,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 初 モテルてす 。&#39;,
-  &#39;token&#39;: 2178,
-  &#39;token_str&#39;: &#39;初&#39;},
- {&#39;score&#39;: 0.029899440705776215,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 女 モテルてす 。&#39;,
-  &#39;token&#39;: 3014,
-  &#39;token_str&#39;: &#39;女&#39;},
- {&#39;score&#39;: 0.021887250244617462,
-  &#39;sequence&#39;: &#39;こんにちは 、 私 は 男 モテルてす 。&#39;,
-  &#39;token&#39;: 5846,
-  &#39;token_str&#39;: &#39;男&#39;}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;score&#39;: 0.17987696826457977,
+  &#39;token&#39;: 7753,
+  &#39;token_str&#39;: &#39;見&#39;,
+  &#39;sequence&#39;: &#39;今 日 の 昼 食 は 見 てした 。&#39;},
+ {&#39;score&#39;: 0.06706605106592178,
+  &#39;token&#39;: 4080,
+  &#39;token_str&#39;: &#39;捨&#39;,
+  &#39;sequence&#39;: &#39;今 日 の 昼 食 は 捨 てした 。&#39;},
+ {&#39;score&#39;: 0.06436670571565628,
+  &#39;token&#39;: 2073,
+  &#39;token_str&#39;: &#39;全&#39;,
+  &#39;sequence&#39;: &#39;今 日 の 昼 食 は 全 てした 。&#39;},
+ {&#39;score&#39;: 0.060412339866161346,
+  &#39;token&#39;: 5216,
+  &#39;token_str&#39;: &#39;満&#39;,
+  &#39;sequence&#39;: &#39;今 日 の 昼 食 は 満 てした 。&#39;},
+ {&#39;score&#39;: 0.02542056515812874,
+  &#39;token&#39;: 4518,
+  &#39;token_str&#39;: &#39;果&#39;,
+  &#39;sequence&#39;: &#39;今 日 の 昼 食 は 果 てした 。&#39;}]
 </pre></div>
 </div>
 </div>
 </div>
+<p><strong>課題</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">unmasker</span></code> に別の文章を渡して推論させてみましょう。</p>
 </div>
 </div>
 <div class="section" id="fine-tuning">
-<h2>テキスト分類のための Fine Tuning の手順<a class="headerlink" href="#fine-tuning" title="Permalink to this headline">¶</a></h2>
-<p>以下、簡易的に 3 種類のラベル (positive: 2, neutral: 1, negative: 0) のデータを使って fine tuning を行います。</p>
+<h2>Fine Tuning 前の感情分析<a class="headerlink" href="#fine-tuning" title="Permalink to this headline">¶</a></h2>
+<p>感情分析タスクは <a class="reference external" href="https://huggingface.co/docs/transformers/main_classes/pipelines#transformers.TextClassificationPipeline">“sentiment-analysis”</a> を <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> のタスクに指定することで行えます。</p>
+<p>pipeline で利用可能なタスク一覧は、<a class="reference external" href="https://huggingface.co/docs/transformers/v4.27.2/en/main_classes/pipelines">Hugging Face のドキュメント</a> で確認できます。</p>
+<p>ただし、モデルが指定されたタスクに対応している必要があります。</p>
+</div>
+<div class="section" id="id4">
+<h2>テキスト分類のための Fine Tuning の手順<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>本来であれば、もっと大規模な学習データセットを用意するべきですが、ここでは説明の簡素化のために、単純なサンプルを手作業で作成して手順を確認します。</p>
+<p>以下のように、3 種類のラベル (positive: 2, neutral: 1, negative: 0) のデータを用意します。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 確認用のデータセット</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;私はこの映画をみることができて、とても嬉しい。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-                              <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;今日の晩御飯は何だろう。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-                              <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;猫に足を噛まれて痛い。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;私はこの映画をみることができて、とても嬉しい。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;POSITIVE&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;今日の晩御飯は何だろう。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;NEUTRAL&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;猫に足を噛まれて痛い。&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;NEGATIVE&quot;</span><span class="p">}</span>
+     <span class="p">]</span>
+<span class="p">)</span>
 <span class="n">df</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
+<div class="output text_html">
+  <div id="df-a6217446-a1c7-428e-a902-eaab25cdf07e">
+    <div class="colab-df-container">
+      <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -549,21 +567,97 @@
     <tr>
       <th>0</th>
       <td>私はこの映画をみることができて、とても嬉しい。</td>
-      <td>2</td>
+      <td>POSITIVE</td>
     </tr>
     <tr>
       <th>1</th>
       <td>今日の晩御飯は何だろう。</td>
-      <td>1</td>
+      <td>NEUTRAL</td>
     </tr>
     <tr>
       <th>2</th>
       <td>猫に足を噛まれて痛い。</td>
-      <td>0</td>
+      <td>NEGATIVE</td>
     </tr>
   </tbody>
 </table>
-</div></div></div>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-a6217446-a1c7-428e-a902-eaab25cdf07e')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-a6217446-a1c7-428e-a902-eaab25cdf07e button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-a6217446-a1c7-428e-a902-eaab25cdf07e');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+</div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -574,17 +668,33 @@
 </div>
 </div>
 </div>
-<div class="section" id="id3">
-<h2>学習<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>学習<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <p>同時にダウンロードされるトークナイザーを利用して、データセットの text の encoding を行います。</p>
+<p><strong>参考</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://huggingface.co/transformers/training.html#pytorch">https://huggingface.co/transformers/training.html#pytorch</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/docs/transformers/tasks/sequence_classification">https://huggingface.co/docs/transformers/tasks/sequence_classification</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/transformers/v4.4.2/custom_datasets.html">https://huggingface.co/transformers/v4.4.2/custom_datasets.html</a></p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ref: https://huggingface.co/transformers/training.html#pytorch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
 
-<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;cl-tohoku/bert-large-japanese&quot;</span>
+<span class="n">id2label</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;NEGATIVE&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;NEUTRAL&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;POSITIVE&quot;</span><span class="p">}</span>
+<span class="n">label2id</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NEGATIVE&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NEUTRAL&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;POSITIVE&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">BertForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">id2label</span><span class="o">=</span><span class="n">id2label</span><span class="p">,</span> <span class="n">label2id</span><span class="o">=</span><span class="n">label2id</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at cl-tohoku/bert-large-japanese were not used when initializing BertForSequenceClassification: [&#39;cls.predictions.decoder.bias&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.decoder.weight&#39;, &#39;cls.seq_relationship.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.predictions.bias&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.predictions.transform.dense.bias&#39;]
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-large-japanese and are newly initialized: [&#39;classifier.bias&#39;, &#39;classifier.weight&#39;]
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 </pre></div>
 </div>
 </div>
@@ -602,10 +712,11 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fine-tuning in native PyTorch</span>
 
-<span class="c1"># &gt; the AdamW() optimizer which implements gradient bias correction as well as weight decay.</span>
+<span class="c1"># the AdamW() optimizer which implements gradient bias correction as well as weight decay.</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 
-<span class="n">labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">train_labels</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">label2id</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">train_labels</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 <span class="n">loss</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">loss</span>
 <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
@@ -617,7 +728,8 @@
 </div>
 <div class="section" id="fine-tune">
 <h2>Fine Tune したモデルで推論<a class="headerlink" href="#fine-tune" title="Permalink to this headline">¶</a></h2>
-<p>学習に使ったデータを入力して推論してみます。</p>
+<p>学習データ量が少ないので性能に期待できませんが、推論の手順を確認します。</p>
+<p>以下のように、推論できます。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentiment_analyzer</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
@@ -632,29 +744,31 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.4746145009994507}]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;label&#39;: &#39;POSITIVE&#39;, &#39;score&#39;: 0.41579246520996094}]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sentiment_analyzer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">train_docs</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 学習データに対する推論</span>
+<span class="n">_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sentiment_analyzer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">train_docs</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>私はこの映画をみることができて、とても嬉しい。: [{&#39;label&#39;: &#39;LABEL_2&#39;, &#39;score&#39;: 0.49736475944519043}]
-今日の晩御飯は何だろう。: [{&#39;label&#39;: &#39;LABEL_1&#39;, &#39;score&#39;: 0.3745356500148773}]
-猫に足を噛まれて痛い。: [{&#39;label&#39;: &#39;LABEL_0&#39;, &#39;score&#39;: 0.5765560269355774}]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>私はこの映画をみることができて、とても嬉しい。: [{&#39;label&#39;: &#39;POSITIVE&#39;, &#39;score&#39;: 0.5623015761375427}]
+今日の晩御飯は何だろう。: [{&#39;label&#39;: &#39;NEUTRAL&#39;, &#39;score&#39;: 0.4257284700870514}]
+猫に足を噛まれて痛い。: [{&#39;label&#39;: &#39;NEGATIVE&#39;, &#39;score&#39;: 0.586097776889801}]
 </pre></div>
 </div>
 </div>
 </div>
-<p>スコアは低いですが、学習に使ったデータセットに関して、正しいラベルが予測できていることを確認できました。</p>
+<p><strong>課題</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">sentiment_analyzer</span></code> に任意の文章を渡して推論してみましょう。</p>
 </div>
-<div class="section" id="id4">
-<h2>まとめ<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h2>まとめ<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <p>簡単な文章とラベルを用意して fine tuning する方法を記載しました。</p>
 <p><a class="reference external" href="https://jupyterbook.hnishi.com/language-models/fine_tune_jp_bert_part02.html">次の記事</a> では、より大きなデータセットを使って、より時間のかかる学習を試してみたいと思います。</p>
 </div>
@@ -686,7 +800,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="easy_try_sentiment_analysis.html" title="previous page">Python で日本語文章の感情分析を簡単に試す (with google colab)</a>
-    <a class='right-next' id="next-link" href="fine_tune_jp_bert_part02.html" title="next page">huggingface transformers を使って日本語 BERT モデルをファインチューニングして感情分析 (with google colab) part02</a>
+    <a class='right-next' id="next-link" href="fine_tune_jp_bert_part02.html" title="next page">参考</a>
 
         </div>
         
