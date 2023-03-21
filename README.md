@@ -90,6 +90,12 @@ When you push the updated codes into the main branch, GitHub Actions builds the 
 - Check `include a link to Colaboratory`
 - Click `OK`
 
+### Deployment
+
+Deployment is automatically done using GitHub Actions.
+
+Please refer to .github/workflows/deploy.yml for more details.
+
 ## Contributors
 
 We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/hnishi/jupyterbook_hnishi/graphs/contributors).
