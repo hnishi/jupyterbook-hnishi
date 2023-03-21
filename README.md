@@ -30,19 +30,19 @@ This will automatically push your build to the `gh-pages` branch. More informati
 
 Install required packages in venv.
 
-```
+```shell
 poetry install --no-root
 ```
 
 Build html.
 
-```
+```shell
 poetry run jupyter-book build jupyterbook_hnishi/
 ```
 
 When you copy the notebook created by colab, you have to clear widget state to prevent the following error during build (idk why).
 
-```
+```shell
 Traceback (most recent call last):
   File "/Users/hnishi/work/jupyterbook-hnishi/.venv/lib/python3.9/site-packages/jupyter_book/sphinx.py", line 150, in build_sphinx
     app.build(force_all, filenames)
@@ -78,6 +78,17 @@ KeyError: 'state'
 As far as I know, to clear widget states, open the notebook in your local jupyter notebook and choose the widget tab and click "clear widget state" and save the ipynb file.
 
 When you push the updated codes into the main branch, GitHub Actions builds the html pages and update your site.
+
+### Editing notebooks with Colaboratory
+
+- Open a notebook
+- Click the link to Colaboratory (in the top cell)
+- Edit the notebook with Colaboratory
+- Open a command bar (`shift` + `ctrl` + `p`)
+- Type `Save a copy in GitHub`
+- Select a branch
+- Check `include a link to Colaboratory`
+- Click `OK`
 
 ## Contributors
 
