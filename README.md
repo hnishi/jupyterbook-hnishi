@@ -86,7 +86,7 @@ When you push the updated codes into the main branch, GitHub Actions builds the 
 - Edit the notebook with Colaboratory
 - Open a command bar (`shift` + `ctrl` + `p`)
 - Type `Save a copy in GitHub`
-- Select a branch
+- Select the `main` branch
 - Check `include a link to Colaboratory`
 - Click `OK`
 
